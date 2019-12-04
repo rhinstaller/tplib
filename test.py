@@ -44,8 +44,8 @@ def main(*in_args):
     )
     with open(args.testcase_file) as testcase_file:
         tc = TestCase(yaml.safe_load(testcase_file))
-    print(tc)
-    pprint.pprint(tc.data)
+    print(tc.dump())
+    #pprint.pprint(tc.data)
 
 if __name__ == "__main__":
     sys.exit(main(*sys.argv[1:]))

@@ -1,7 +1,9 @@
 from abc import ABC, abstractmethod
 
 class GarbageData(Exception):
-    pass
+    def __init__(self, instance, data):
+        message = "%s document contains additional unexpected data: %s"
+        super().__init__(message % (type(instance), data))
 
 class DataObject(ABC):
     mapping = dict()
@@ -11,12 +13,7 @@ class DataObject(ABC):
         self.parent = parent
         self.feed(data)
         if data:
-            raise GarbageData(
-                "%s document contains additional unexpected data: %s" % (
-                    type(self),
-                    data
-                )
-            )
+            raise GarbageData(self, data)
 
     def _autofeed(self, data):
         for mapping in self.mapping.values():
@@ -38,14 +35,20 @@ class DataObject(ABC):
                 else:
                     # optional without inheritance
                     value = data.pop(mapping.source, default)
-                # transform value desired way if desired
+                # transform value desired way if desired or check allowed types
+                # if no transformation should be done
                 if mapping.func is not None:
                     value = mapping.func(value)
+                elif not isinstance(value, mapping.allowed_types):
+                    raise ValueError("Wrong type of: %s" % mapping.name)
                 # assign obtained value
                 self.data[mapping.name] = value
             except KeyError as e:
                 # add support for validation here!
-                raise e
+                if validate:
+                    print(e)
+                else:
+                    raise e
 
 
     def feed(self, data):
@@ -69,4 +72,23 @@ class DataObject(ABC):
             type(self).__module__,
             type(self).__name__,
             self._name,
+        )
+
+
+    def dump(self, indent=2):
+        def dump_or_repr(data, indent):
+            try:
+                return data.dump(indent)
+            except AttributeError:
+                return repr(data)
+
+        return '<%s.%s(%s){\n%s}>' % (
+            type(self).__module__,
+            type(self).__name__,
+            self._name,
+            ",\n".join([
+                (indent*" " + "%s: %s") % (key, dump_or_repr(value, indent+2))
+                for key, value
+                in self.data.items()
+            ]),
         )
