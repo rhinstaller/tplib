@@ -6,7 +6,7 @@ class Instruction(DataObject):
     default_result = 'Success'
     mapping = dict((
         m('step'),
-        m('result', default='', allowed_types=str),
+        m('result', required=False, default='', allowed_types=str),
     ))
     def feed(self, data):
         if isinstance(data, str):
@@ -23,7 +23,7 @@ class Phase(ListObject):
 
     def feed(self, data):
         if not isinstance(data, list):
-            raise TypeError('Phase (setup,steps,teardown) contains invalid data. List type was expected.')
+            raise TypeError('Phase "%s" contains invalid data. List type was expected.' % self._name)
         self.data = [ Instruction(item) for item in data ]
         data.clear()
 
