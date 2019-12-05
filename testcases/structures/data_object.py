@@ -11,7 +11,7 @@ class DataObject(ABC):
     def __init__(self, data, parent=None):
         self.data = {}
         self.parent = parent
-        self.feed(data)
+        data = self.feed(data)
         if data:
             raise GarbageData(self, data)
 
@@ -40,7 +40,7 @@ class DataObject(ABC):
                 if mapping.func is not None:
                     value = mapping.func(value)
                 elif not isinstance(value, mapping.allowed_types):
-                    raise ValueError("Wrong type of: %s" % mapping.name)
+                    raise TypeError("Wrong type of: %s. Expected one of: %s, was: %s" % (mapping.name, mapping.allowed_types, type(value)))
                 # assign obtained value
                 self.data[mapping.name] = value
             except KeyError as e:
@@ -49,10 +49,11 @@ class DataObject(ABC):
                     print(e)
                 else:
                     raise e
+        return data
 
 
     def feed(self, data):
-        self._autofeed(data)
+        data = self._autofeed(data)
 
 
     @property
@@ -90,5 +91,28 @@ class DataObject(ABC):
                 (indent*" " + "%s: %s") % (key, dump_or_repr(value, indent+2))
                 for key, value
                 in self.data.items()
+            ]),
+        )
+
+class ListObject(DataObject):
+    @property
+    def _name(self):
+        return self.name
+
+    def dump(self, indent=2):
+        def dump_or_repr(data, indent):
+            try:
+                return data.dump(indent)
+            except AttributeError:
+                return repr(data)
+
+        return '<%s.%s(%s){\n%s}>' % (
+            type(self).__module__,
+            type(self).__name__,
+            self._name,
+            ",\n".join([
+                (indent*" " + "%s") % dump_or_repr(value, indent+2)
+                for value
+                in self.data
             ]),
         )

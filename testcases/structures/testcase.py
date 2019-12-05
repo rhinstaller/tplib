@@ -1,18 +1,44 @@
+import functools
 from . import Mapping as m
-from .data_object import DataObject
+from .data_object import DataObject, ListObject
 
 class Instruction(DataObject):
-    pass
+    default_result = 'Success'
+    mapping = dict((
+        m('step'),
+        m('result', default='', allowed_types=str),
+    ))
+    def feed(self, data):
+        if isinstance(data, str):
+            self.data = {'step' : data, 'result' : self.default_result}
+            return None
+        return self._autofeed(data)
 
-class Phase(DataObject):
-    pass
+
+class Phase(ListObject):
+    def __init__(self, name, data):
+        self.name = name
+        super().__init__(data)
+
+
+    def feed(self, data):
+        if not isinstance(data, list):
+            raise TypeError('Phase (setup,steps,teardown) contains invalid data. List type was expected.')
+        self.data = [ Instruction(item) for item in data ]
+        data.clear()
+
 
 class Instructions(DataObject):
     mapping = dict((
-        m('setup', required=False, default=[], allowed_types=list),#, func=Phase),
-        m('steps', allowed_types=list),#, func=Phase),
-        m('teardown', required=False, default=[], allowed_types=list),#, func=Phase),
+        m('setup', required=False, default=[],
+          func=functools.partial(Phase, 'setup'),
+        ),
+        m('steps', func=functools.partial(Phase, 'steps')),
+        m('teardown', required=False, default=[],
+          func=functools.partial(Phase, 'teardown')
+        ),
     ))
+
 
 class TestCase(DataObject):
     mapping = dict((
@@ -22,7 +48,7 @@ class TestCase(DataObject):
         m('execution', allowed_types=dict),
         m('filter', allowed_types=list),
         m('instructions', func=Instructions),
-        m('configurations', inherited=True, allowed_types=list),
+        m('configurations', required=False, default=None, allowed_types=(list,type(None))),
         m('author', required=False),
         m('tags', required=False, default=[], func=set)
     ))
