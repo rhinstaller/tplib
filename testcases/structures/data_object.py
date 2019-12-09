@@ -1,5 +1,11 @@
 from abc import ABC, abstractmethod
 
+def dump_or_repr(data, indent):
+    try:
+        return data.dump(indent)
+    except AttributeError:
+        return repr(data)
+
 class GarbageData(Exception):
     def __init__(self, instance, data):
         message = "%s document contains additional unexpected data: %s"
@@ -66,7 +72,7 @@ class DataObject(ABC):
 
     @property
     def _name(self):
-        return self.data.get('name', 'unnamed')
+        return self.data.get('name')
 
 
     def __getattr__(self, name):
@@ -84,22 +90,31 @@ class DataObject(ABC):
         )
 
 
-    def dump(self, indent=2):
-        def dump_or_repr(data, indent):
-            try:
-                return data.dump(indent)
-            except AttributeError:
-                return repr(data)
-
-        return '<%s.%s(%s){\n%s}>' % (
+    def dumpname(self):
+        name = self._name
+        if name is not None:
+            return '%s.%s(%s)' % (
+                type(self).__module__,
+                type(self).__name__,
+                name,
+            )
+        return '%s.%s' % (
             type(self).__module__,
             type(self).__name__,
-            self._name,
-            ",\n".join([
-                (indent*" " + "%s: %s") % (key, dump_or_repr(value, indent+2))
-                for key, value
-                in self.data.items()
-            ]),
+        )
+
+    def dumpcontent(self, indent):
+        return ",\n".join([
+            (indent*" " + "%s: %s") % (key, dump_or_repr(value, indent))
+            for key, value
+            in self.data.items()
+        ])
+
+    def dump(self, indent=0):
+        return '<%s{\n%s\n%s}>' % (
+            self.dumpname(),
+            self.dumpcontent(indent+2),
+            indent*" ",
         )
 
 class ListObject(DataObject):
@@ -107,20 +122,9 @@ class ListObject(DataObject):
     def _name(self):
         return self.name
 
-    def dump(self, indent=2):
-        def dump_or_repr(data, indent):
-            try:
-                return data.dump(indent)
-            except AttributeError:
-                return repr(data)
-
-        return '<%s.%s(%s){\n%s}>' % (
-            type(self).__module__,
-            type(self).__name__,
-            self._name,
-            ",\n".join([
-                (indent*" " + "%s") % dump_or_repr(value, indent+2)
-                for value
-                in self.data
-            ]),
-        )
+    def dumpcontent(self, indent):
+        return ",\n".join([
+            (indent*" " + "%s") % dump_or_repr(value, indent)
+            for value
+            in self.data
+        ])
