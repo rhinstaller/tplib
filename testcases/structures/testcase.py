@@ -10,8 +10,7 @@ class Instruction(DataObject):
     ))
     def feed(self, data):
         if isinstance(data, str):
-            self.data = {'step' : data, 'result' : self.default_result}
-            return None
+            data = {'step' : data, 'result' : self.default_result}
         return self._autofeed(data)
 
 
