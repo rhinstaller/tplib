@@ -7,6 +7,7 @@ class GarbageData(Exception):
 
 class DataObject(ABC):
     mapping = dict()
+    allow_nonstandard_values = True
 
     def __init__(self, data, parent=None):
         self.data = {}
@@ -49,6 +50,13 @@ class DataObject(ABC):
                     print(e)
                 else:
                     raise e
+
+        # process x- values if allowed
+        if self.allow_nonstandard_values:
+            for key in list(data.keys()):
+                if key.startswith('x-'):
+                    self.data[key] = data.pop(key)
+
         return data
 
 
