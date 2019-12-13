@@ -90,6 +90,10 @@ class DataObject(ABC):
         )
 
 
+    def __iter__(self):
+        return self.data.__iter__()
+
+
     def dumpname(self):
         name = self._name
         if name is not None:
