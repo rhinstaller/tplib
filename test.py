@@ -3,7 +3,6 @@
 import sys
 import argparse
 import logging
-import yaml
 import pprint
 from testcases.structures.testcase import TestCase
 
@@ -42,8 +41,7 @@ def main(*in_args):
         level=loglevel,
         format=logformat,
     )
-    with open(args.testcase_file) as testcase_file:
-        tc = TestCase(yaml.safe_load(testcase_file))
+    tc = TestCase(args.testcase_file)
     #print(tc)
     print(tc.dump())
     #pprint.pprint(tc.data)
