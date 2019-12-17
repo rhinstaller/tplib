@@ -82,6 +82,10 @@ class DataObject(ABC):
             return self.data[name]
 
 
+    def __getitem__(self, name):
+        return self.data[name]
+
+
     def __repr__(self):
         return '<%s.%s(%s)>' % (
             type(self).__module__,
