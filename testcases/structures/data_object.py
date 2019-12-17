@@ -1,3 +1,4 @@
+import yaml
 from abc import ABC, abstractmethod
 
 def dump_or_repr(data, indent):
@@ -136,3 +137,12 @@ class ListObject(DataObject):
             for value
             in self.data
         ])
+
+class DocumentObject(DataObject):
+    def __init__(self, filename, override_data=None, parent=None):
+        self.filename = filename
+        data = override_data
+        if override_data is None:
+            with open(self.filename) as testcase_fo:
+                data = yaml.safe_load(testcase_fo)
+        super().__init__(data, parent)

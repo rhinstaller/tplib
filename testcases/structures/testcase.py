@@ -1,7 +1,6 @@
-import yaml
 import functools
 from . import Mapping as m
-from .data_object import DataObject, ListObject
+from .data_object import DataObject, DocumentObject, ListObject
 
 class Instruction(DataObject):
     default_result = 'Success'
@@ -40,7 +39,7 @@ class Instructions(DataObject):
     ))
 
 
-class TestCase(DataObject):
+class TestCase(DocumentObject):
     mapping = dict((
         m('name'),
         m('description'),
@@ -52,11 +51,3 @@ class TestCase(DataObject):
         m('author', required=False),
         m('tags', required=False, default=[], func=set)
     ))
-
-    def __init__(self, filename, override_data=None, parent=None):
-        self.filename = filename
-        data = override_data
-        if override_data is None:
-            with open(self.filename) as testcase_fo:
-                data = yaml.safe_load(testcase_fo)
-        super().__init__(data, parent)
