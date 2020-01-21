@@ -1,4 +1,8 @@
 class Mapping():
+    # TODO: add support for one_of=str(group) which extends required
+    # It should be used to group multiple mappings together and only one of
+    # the mapping of the group can and has to be set. Mappings of one_of
+    # cannot have default value.
     def __init__(self, name, source=None, required=True, default=None,
                  inherited=False, func=None, allowed_types=str):
         self.name = name
