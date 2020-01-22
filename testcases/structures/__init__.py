@@ -12,6 +12,10 @@ class Mapping():
         self.inherited = inherited
         self.func = func
         self.allowed_types = allowed_types
+        if not isinstance(allowed_types, tuple):
+            self.allowed_types = (self.allowed_types, )
+        if self.required == False and self.default is None and type(None) not in self.allowed_types:
+            self.allowed_types = self.allowed_types + (type(None), )
 
     # Enable using mapping in dict constructor
     def __iter__(self):
