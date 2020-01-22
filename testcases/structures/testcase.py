@@ -51,3 +51,7 @@ class TestCase(DocumentObject):
         m('author', required=False),
         m('tags', required=False, default=[], func=set)
     ))
+
+    @property
+    def id(self):
+        return self.name
