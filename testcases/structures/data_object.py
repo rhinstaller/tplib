@@ -16,9 +16,10 @@ class DataObject(ABC):
     mapping = dict()
     allow_nonstandard_values = True
 
-    def __init__(self, data, parent=None):
+    def __init__(self, data, parent=None, library=None):
         self.data = {}
         self.parent = parent
+        self.library = library
         data = self.feed(data)
         if data:
             raise GarbageData(self, data)
@@ -139,10 +140,10 @@ class ListObject(DataObject):
         ])
 
 class DocumentObject(DataObject):
-    def __init__(self, filename, override_data=None, parent=None):
+    def __init__(self, filename, override_data=None, parent=None, library=None):
         self.filename = filename
         data = override_data
         if override_data is None:
             with open(self.filename) as testcase_fo:
                 data = yaml.safe_load(testcase_fo)
-        super().__init__(data, parent)
+        super().__init__(data, parent, library)

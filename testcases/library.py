@@ -29,7 +29,7 @@ class Library():
     def _load_structures(self, directories, pattern, cls):
         structures = dict()
         for docfile in _iter_documents(directories, pattern):
-            structure = cls(docfile)
+            structure = cls(docfile, library=self)
             structures[structure.id] = structure
         return structures
 
