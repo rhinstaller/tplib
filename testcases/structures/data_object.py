@@ -72,6 +72,15 @@ class DataObject(ABC):
         data = self._autofeed(data)
 
 
+    def stabilize(self):
+        # Should be overloaded if data object needs stabilization
+        # This should be used for calculation of various values
+        # from the library. Once the object has all needed values
+        # calculated, it should return True. If some more data
+        # is still needed, False should be returned.
+        return True
+
+
     @property
     def _name(self):
         return self.data.get('name')

@@ -34,8 +34,8 @@ class Library():
         return structures
 
     def _calculate_and_stabilize(self):
-        return True
-        unstable = set(self.testcases.values() + self.requirements.values())
+        unstable = set(self.testcases.values())
+        unstable |= set(self.requirements.values())
         last_count = 0
         while len(unstable) != last_count:
             last_count = len(unstable)
