@@ -52,6 +52,10 @@ class TestCase(DocumentObject):
         m('tags', required=False, default=[], func=set)
     ))
 
+    def __init__(self, data, parent=None, library=None):
+        super().__init__(data, parent, library)
+        self.verifiesRequirement = set()
+
     @property
     def id(self):
         return self.name

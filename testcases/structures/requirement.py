@@ -26,6 +26,10 @@ class Requirement(DocumentObject):
         m('acceptance_criteria', required=False, func=dict),
     ))
 
+    def __init__(self, data, parent=None, library=None):
+        self.verificationTestCases = set()
+        super().__init__(data, parent=parent, library=library)
+
     @property
     def id(self):
         return self.name
