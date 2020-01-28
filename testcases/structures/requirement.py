@@ -1,6 +1,7 @@
 import functools
 from . import Mapping as m
 from .data_object import DataObject, DocumentObject, ListObject
+from ..expressions import eval_bool
 
 class VerifiedBy(DataObject):
     mapping = dict((
@@ -49,7 +50,9 @@ class Requirement(DocumentObject):
         )
 
     def _directQueryCases(self, query):
-        raise Exception('NOT IMPLEMENTED')
+        return set(
+            [ testcase for testcase in self.library.testcases.values() if eval_bool(query, tc=testcase, req=self) ]
+        )
 
     def _namedQueryCases(self, query_name):
         raise Exception('NOT IMPLEMENTED')
