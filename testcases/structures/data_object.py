@@ -14,6 +14,7 @@ class GarbageData(Exception):
 
 class DataObject(ABC):
     mapping = dict()
+    runtime_properties = []
     allow_nonstandard_values = True
 
     def __init__(self, data, parent=None, library=None):
@@ -129,12 +130,34 @@ class DataObject(ABC):
             in self.data.items()
         ])
 
+    def dumpproperties(self, indent):
+        return ",\n".join([
+            (indent*" " + "%s: %s") % (prop_name, repr(getattr(self, prop_name)))
+            for prop_name
+            in self.runtime_properties
+        ])
+
     def dump(self, indent=0):
-        return '<%s{\n%s\n%s}>' % (
-            self.dumpname(),
-            self.dumpcontent(indent+2),
-            indent*" ",
-        )
+        format_string_bare = """<%(name)s{
+%(indent)s  DATA:
+%(content)s
+%(indent)s}>"""
+        format_string_propeties = """<%(name)s{
+%(indent)s  DATA:
+%(content)s
+%(indent)s  PROPERTIES:
+%(properties)s
+%(indent)s}>"""
+        if self.runtime_properties:
+            format_string = format_string_propeties
+        else:
+            format_string = format_string_bare
+        return format_string % {
+            'name' : self.dumpname(),
+            'content' : self.dumpcontent(indent+4),
+            'properties' : self.dumpproperties(indent+4),
+            'indent' : indent*" ",
+        }
 
 class ListObject(DataObject):
     @property

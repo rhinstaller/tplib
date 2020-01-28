@@ -51,6 +51,9 @@ class TestCase(DocumentObject):
         m('author', required=False),
         m('tags', required=False, default=[], func=set)
     ))
+    runtime_properties = [
+        'verifiesRequirement',
+    ]
 
     def __init__(self, data, parent=None, library=None):
         super().__init__(data, parent, library)

@@ -26,6 +26,9 @@ class Requirement(DocumentObject):
         m('verified_by', func=VerifiedBy),
         m('acceptance_criteria', required=False, default=(), func=dict),
     ))
+    runtime_properties = [
+        'verificationTestCases',
+    ]
 
     def __init__(self, data, parent=None, library=None):
         self.verificationTestCases = set()
