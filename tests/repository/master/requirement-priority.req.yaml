@@ -1,0 +1,9 @@
+name: Priority requirement
+description: |
+  This requirement serves only for testing purposes for git repository -> tcms
+  synchronization.
+tags:
+  - foo_tag
+  - bar_tag
+verified_by:
+  query: "tc.priority >= 9"
