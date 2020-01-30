@@ -1,3 +1,4 @@
+from copy import copy
 import os
 import fnmatch
 
@@ -10,6 +11,48 @@ def _iter_documents(directories, pattern):
             for filename in files:
                 if fnmatch.fnmatchcase(filename, pattern):
                     yield os.path.join(root, filename)
+
+def diff(old, new):
+    old_requirements = set(old.requirements)
+    old_cases = set(old.testcases)
+    new_requirements = set(new.requirements)
+    new_cases = set(new.testcases)
+    retval = {
+        "removed" : {
+            "testplans" : set(),
+            "requirements" : old_requirements.difference(new_requirements),
+            "testcases" : old_cases.difference(new_cases),
+        },
+        "added" : {
+            "testplans" : set(),
+            "requirements" : new_requirements.difference(old_requirements),
+            "testcases" : new_cases.difference(old_cases),
+        },
+        "changed" : {
+            "testplans" : set(),
+            "requirements" : set(),
+            "testcases" : set(),
+        },
+        "unchanged" : {
+            "testplans" : set(),
+            "requirements" : old_requirements.intersection(new_requirements),
+            "testcases" : old_cases.intersection(new_cases),
+        },
+    }
+    # WILL ACTIVATE LATER WHEN TESTPLANS ARE ADDED
+    #for testplan_id in copy(retval["unchanged"]["testplans"]):
+    #    if old.testplans[testplan_id] != new.testplans[testplan_id]:
+    #        retval["unchanged"]["testplans"].remove(testplan_id)
+    #        retval["changed"]["testplans"].add(testplan_id)
+    for requirement_id in copy(retval["unchanged"]["requirements"]):
+        if old.requirements[requirement_id] != new.requirements[requirement_id]:
+            retval["unchanged"]["requirements"].remove(requirement_id)
+            retval["changed"]["requirements"].add(requirement_id)
+    for case_id in copy(retval["unchanged"]["testcases"]):
+        if old.testcases[case_id] != new.testcases[case_id]:
+            retval["unchanged"]["testcases"].remove(case_id)
+            retval["changed"]["testcases"].add(case_id)
+    return retval
 
 class Library():
     def __init__(self, directories=None):
