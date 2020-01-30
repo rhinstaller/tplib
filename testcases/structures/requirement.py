@@ -66,3 +66,12 @@ class Requirement(DocumentObject):
             return methods[query_type](query)
         except KeyError:
             raise ValueError("Unknown query type: '%s'" % query_type)
+
+    def __eq__(self, other):
+        if type(self) != type(other):
+            return NotImplemented
+        if self.data != other.data:
+            return False
+        if { tc.id for tc in self.verificationTestCases } != { tc.id for tc in other.verificationTestCases }:
+            return False
+        return True

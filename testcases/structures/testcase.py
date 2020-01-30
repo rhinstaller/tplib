@@ -62,3 +62,12 @@ class TestCase(DocumentObject):
     @property
     def id(self):
         return self.name
+
+    def __eq__(self, other):
+        if type(self) != type(other):
+            return NotImplemented
+        if self.data != other.data:
+            return False
+        if { req.id for req in self.verifiesRequirement } != { req.id for req in other.verifiesRequirement }:
+            return False
+        return True

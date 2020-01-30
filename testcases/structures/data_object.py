@@ -94,6 +94,24 @@ class DataObject(ABC):
             return self.data[name]
 
 
+    def __eq__(self, other):
+        if type(self) != type(other):
+            return NotImplemented
+        if self.data != other.data:
+            return False
+        # !!! NOT A GOOD IDEA - THERE'S INFINITE RECURSION !!!
+        #for prop in self.runtime_properties:
+        #    if getattr(self, prop) != getattr(other, prop):
+        #        return False
+        return True
+
+
+    def __ne__(self, other):
+        if type(self) != type(other):
+            return NotImplemented
+        return not (self == other)
+
+
     def __getitem__(self, name):
         return self.data[name]
 
