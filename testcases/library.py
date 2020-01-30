@@ -33,13 +33,16 @@ class Library():
             structures[structure.id] = structure
         return structures
 
-    def _calculate_and_stabilize(self):
-        unstable = set(self.testcases.values())
-        unstable |= set(self.requirements.values())
+    def _calculate_and_stabilize_structures(self, structures):
+        unstable = set(structures.keys())
         last_count = 0
         while len(unstable) != last_count:
             last_count = len(unstable)
-            for structure in list(unstable):
-                if structure.stabilize():
-                    unstable.remove(structure)
+            for structure_id in list(unstable):
+                if structures[structure_id].stabilize():
+                    unstable.remove(structure_id)
         return len(unstable) == 0
+
+    def _calculate_and_stabilize(self):
+        self._calculate_and_stabilize_structures(self.requirements)
+        self._calculate_and_stabilize_structures(self.testcases)

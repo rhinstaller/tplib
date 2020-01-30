@@ -31,7 +31,7 @@ class Requirement(DocumentObject):
     ]
 
     def __init__(self, data, parent=None, library=None):
-        self.verificationTestCases = set()
+        self.verificationTestCases = []
         super().__init__(data, parent=parent, library=library)
 
     @property
@@ -43,19 +43,15 @@ class Requirement(DocumentObject):
             if query is None:
                 continue
             for testcase in self._findVerificationCases(query_type, query):
-                testcase.verifiesRequirement.add(self)
-                self.verificationTestCases.add(testcase)
+                testcase.verifiesRequirement.append(self)
+                self.verificationTestCases.append(testcase)
         return True
 
     def _directListCases(self, cases_list):
-        return set(
-            [ self.library.testcases[case_name] for case_name in cases_list ]
-        )
+        return [ self.library.testcases[case_name] for case_name in cases_list ]
 
     def _directQueryCases(self, query):
-        return set(
-            [ testcase for testcase in self.library.testcases.values() if eval_bool(query, tc=testcase, req=self) ]
-        )
+        return [ testcase for testcase in self.library.testcases.values() if eval_bool(query, tc=testcase, req=self) ]
 
     def _namedQueryCases(self, query_name):
         raise Exception('NOT IMPLEMENTED')

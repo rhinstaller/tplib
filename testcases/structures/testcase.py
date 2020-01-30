@@ -57,7 +57,7 @@ class TestCase(DocumentObject):
 
     def __init__(self, data, parent=None, library=None):
         super().__init__(data, parent, library)
-        self.verifiesRequirement = set()
+        self.verifiesRequirement = []
 
     @property
     def id(self):
