@@ -45,7 +45,7 @@ class TestCase(DocumentObject):
         m('description'),
         m('priority', allowed_types=int),
         m('execution', allowed_types=dict),
-        m('filter', allowed_types=list),
+        m('filter', required=False, default=[], allowed_types=list),
         m('instructions', func=Instructions),
         m('configurations', required=False, default=None, allowed_types=(list,type(None))),
         m('author', required=False),
