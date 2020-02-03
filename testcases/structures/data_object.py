@@ -55,6 +55,8 @@ class DataObject(ABC):
                 self.data[mapping.name] = value
             except KeyError as e:
                 # add support for validation here!
+                validate = False
+                print(self.filename)
                 if validate:
                     print(e)
                 else:
