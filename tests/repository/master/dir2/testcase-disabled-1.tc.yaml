@@ -1,0 +1,23 @@
+name: testing case (disabled)
+x-polarion-status: inactive
+description: |
+  This test case serves only for testing purposes for git repository -> tcms
+  synchronization.
+author: pholica@redhat.com
+priority: 3
+execution:
+  type: manual
+configurations:
+  - arch: x86_64
+filter:
+  - variant: BaseOS
+instructions:
+  setup:
+    - Don't find this test case
+  steps:
+    - step: Don't read the description
+      result: Description is not visible
+    - step: Don't check any other field
+      result: The field values are gone
+  teardown:
+    - step: Keep this test case
