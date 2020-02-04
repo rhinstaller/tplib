@@ -5,7 +5,7 @@ import argparse
 import logging
 import pprint
 from testcases.library import Library
-from testcases.expressions import eval_bool
+from testcases.expressions import eval_bool, eval_str
 
 def main(*in_args):
     parser = argparse.ArgumentParser(description='Query and print information about testcases and/or requirements in the testcase library.')
@@ -18,6 +18,11 @@ def main(*in_args):
         nargs='?',
         default="True",
         help="Jinja expression used for filterling. Use 'i' variable for the item reference. Also 'tc' in case of testcase and 'req' in case of requirement are available.",
+    )
+    parser.add_argument(
+        'print_query',
+        nargs='?',
+        help="Result of Jinja query to be printed for the queried items."
     )
     selector = parser.add_mutually_exclusive_group()
     selector.add_argument(
@@ -63,14 +68,18 @@ def main(*in_args):
     if not args.testcases_only:
         for requirement in library.requirements.values():
             if eval_bool(args.query, i=requirement, req=requirement):
-                if args.brief:
+                if args.print_query is not None:
+                    print(eval_str(args.print_query, i=requirement, req=requirement))
+                elif args.brief:
                     print(repr(requirement))
                 else:
                     print(requirement.dump())
     if not args.requirements_only:
         for testcase in library.testcases.values():
             if eval_bool(args.query, i=testcase, tc=testcase):
-                if args.brief:
+                if args.print_query is not None:
+                    print(eval_str(args.print_query, i=testcase, tc=testcase))
+                elif args.brief:
                     print(repr(testcase))
                 else:
                     print(testcase.dump())
