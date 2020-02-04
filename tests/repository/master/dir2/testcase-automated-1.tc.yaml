@@ -1,5 +1,4 @@
 name: testing case (automated)
-x-polarion-id: FOO
 description: |
   This test case serves only for testing purposes for git repository -> tcms
   synchronization. This is variant of automated test case.
