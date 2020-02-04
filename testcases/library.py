@@ -68,8 +68,8 @@ class Library():
 
     def _load_structures(self, directory, pattern, cls):
         structures = dict()
-        for docfile in _iter_documents(directories, pattern):
-            structure = cls(docfile, library=self)
+        for docfile in _iter_documents(directory, pattern):
+            structure = cls(docfile, library=self, basedir=directory)
             structures[structure.id] = structure
         return structures
 

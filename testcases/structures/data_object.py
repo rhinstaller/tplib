@@ -1,3 +1,4 @@
+import os
 import yaml
 from abc import ABC, abstractmethod
 
@@ -192,10 +193,13 @@ class ListObject(DataObject):
         ])
 
 class DocumentObject(DataObject):
-    def __init__(self, filename, override_data=None, parent=None, library=None):
+    def __init__(self, filename, override_data=None, parent=None, library=None, basedir=None):
         self.filename = filename
+        self.basedir = basedir
+        if self.basedir is not None:
+            self.filename = os.path.relpath(filename, self.basedir)
         data = override_data
         if override_data is None:
-            with open(self.filename) as testcase_fo:
+            with open(filename) as testcase_fo:
                 data = yaml.safe_load(testcase_fo)
         super().__init__(data, parent, library)

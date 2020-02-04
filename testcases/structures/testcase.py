@@ -55,8 +55,8 @@ class TestCase(DocumentObject):
         'verifiesRequirement',
     ]
 
-    def __init__(self, data, parent=None, library=None):
-        super().__init__(data, parent, library)
+    def __init__(self, data, parent=None, library=None, basedir=None):
+        super().__init__(data, parent, library, basedir=basedir)
         self.verifiesRequirement = []
 
     @property

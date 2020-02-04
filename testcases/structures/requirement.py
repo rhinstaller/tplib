@@ -30,9 +30,9 @@ class Requirement(DocumentObject):
         'verificationTestCases',
     ]
 
-    def __init__(self, data, parent=None, library=None):
+    def __init__(self, data, parent=None, library=None, basedir=None):
         self.verificationTestCases = []
-        super().__init__(data, parent=parent, library=library)
+        super().__init__(data, parent=parent, library=library, basedir=basedir)
 
     @property
     def id(self):
