@@ -1,0 +1,9 @@
+name: Direct requirement
+description: |
+  Direct requirement
+verified_by:
+  direct_list:
+    - Medium priority case
+acceptance_criteria:
+  direct_list:
+    - Medium priority case

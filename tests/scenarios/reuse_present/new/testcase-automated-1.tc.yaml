@@ -1,0 +1,33 @@
+name: testing case (automated)
+x-polarion-id: TEST-3
+description: |
+  This test case serves only for testing purposes for git repository -> tcms
+  synchronization. This is variant of automated test case.
+author: pholica@redhat.com
+tags:
+  - autofoo_tag
+  - autobar_tag
+priority: 10
+execution:
+  type: automated-executable
+  automation_data: |
+    #!/bin/bash
+    exit 0
+configurations:
+  - arch: x86_64
+  - arch: ppc64le
+filter:
+  - variant: BaseOS
+instructions:
+  setup:
+    - Create executable file from this test case using automation_data
+  steps:
+    - step: Run the executable
+      result: |
+        * Executable finishes with return code 0
+        * Nothing is printed
+  teardown:
+    - step: Delete the executable created in setup
+      result: The executable have ceased to exist
+    - step: Delete this test case
+      result: Test case cannot be found in this tcms anymore

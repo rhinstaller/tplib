@@ -1,0 +1,13 @@
+name: High priority case
+description: |
+  High priority case
+author: pholica@redhat.com
+priority: 10
+execution:
+  type: automated-executable
+  automation_data: |
+    #!/bin/bash
+    exit 0
+instructions:
+  steps:
+    - Some step

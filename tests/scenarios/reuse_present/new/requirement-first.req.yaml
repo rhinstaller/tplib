@@ -1,0 +1,14 @@
+name: First requirement
+x-polarion-id: TEST-1
+description: |
+  This requirement serves only for testing purposes for git repository -> tcms
+  synchronization.
+tags:
+  - foo_tag
+  - bar_tag
+verified_by:
+  direct_list:
+    - testing case (manual)
+acceptance_criteria:
+  direct_list:
+    - testing case (manual)

@@ -1,0 +1,29 @@
+name: testing case (manual)
+x-polarion-id: TEST-4
+description: |
+  This test case serves only for testing purposes for git repository -> tcms
+  synchronization.
+author: pholica@redhat.com
+tags:
+  - foo_tag
+  - bar_tag
+priority: 7
+execution:
+  type: manual
+configurations:
+  - arch: x86_64
+  - arch: ppc64le
+filter:
+  - variant: BaseOS
+instructions:
+  setup:
+    - Find this test case
+  steps:
+    - step: Read the description
+      result: Description is correct
+    - step: Check all other fields
+      result: The field values correspond with data in git
+    - Drink cup of coffee
+  teardown:
+    - step: Delete this test case
+      result: Test case cannot be found in this tcms anymore

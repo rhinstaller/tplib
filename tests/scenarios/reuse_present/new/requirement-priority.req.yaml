@@ -1,0 +1,10 @@
+name: Priority requirement
+x-polarion-id: TEST-2
+description: |
+  This requirement serves only for testing purposes for git repository -> tcms
+  synchronization.
+tags:
+  - foo_tag
+  - bar_tag
+verified_by:
+  query: "tc.priority >= 9"
