@@ -73,7 +73,7 @@ class DataObject(ABC):
 
 
     def feed(self, data):
-        data = self._autofeed(data)
+        return self._autofeed(data)
 
 
     def stabilize(self):
