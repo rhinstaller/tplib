@@ -2,11 +2,31 @@ import os
 import yaml
 from abc import ABC, abstractmethod
 
+## BEGIN OF VERY VERY VERY POOR PLACE FOR MODIFYING YAML DUMP BEHAVIOUR
+## Multiline strings should be formatted using '|' character
+## Source: https://stackoverflow.com/a/45004775
+yaml.SafeDumper.orig_represent_str = yaml.SafeDumper.represent_str
+
+def repr_str(dumper, data):
+    if '\n' in data:
+        return dumper.represent_scalar(u'tag:yaml.org,2002:str', data, style='|')
+    return dumper.orig_represent_str(data)
+
+yaml.add_representer(str, repr_str, Dumper=yaml.SafeDumper)
+## END
+
 def dump_or_repr(data, indent):
     try:
         return data.dump(indent)
     except AttributeError:
         return repr(data)
+
+def serialize_value(value):
+    if isinstance(value, DataObject):
+        return value.serialize()
+    if isinstance(value, set):
+        return list(value)
+    return value
 
 class GarbageData(Exception):
     def __init__(self, instance, data):
@@ -180,6 +200,25 @@ class DataObject(ABC):
             'indent' : indent*" ",
         }
 
+    def _should_serialize_self(self):
+        return bool(self.data)
+
+    def _should_serialize_item(self, item):
+        mapping = self.mapping[item]
+        if mapping.required:
+            return True
+        if isinstance(self.data[item], DataObject):
+            return self.data[item]._should_serialize_self()
+        default = mapping.default
+        if mapping.func is not None:
+            default = mapping.func(default)
+        if default == self.data[item]:
+            return False
+        return True
+
+    def serialize(self):
+        return { key : serialize_value(value) for key, value in self.data.items() if self._should_serialize_item(key) }
+
 class ListObject(DataObject):
     @property
     def _name(self):
@@ -192,6 +231,10 @@ class ListObject(DataObject):
             in self.data
         ])
 
+    def serialize(self):
+        return [ value.serialize() if isinstance(value, DataObject) else value for value in self.data ]
+
+
 class DocumentObject(DataObject):
     def __init__(self, filename, override_data=None, parent=None, library=None, basedir=None):
         self.filename = filename
@@ -203,3 +246,6 @@ class DocumentObject(DataObject):
             with open(filename) as testcase_fo:
                 data = yaml.safe_load(testcase_fo)
         super().__init__(data, parent, library)
+
+    def toYaml(self):
+        return yaml.safe_dump(self.serialize(), sort_keys=False)
