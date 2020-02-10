@@ -12,8 +12,12 @@ def _iter_documents(directory, pattern):
                 yield os.path.join(root, filename)
 
 def diff(old, new):
-    old_requirements = set(old.requirements)
-    old_cases = set(old.testcases)
+    if old is None:
+        old_requirements = set()
+        old_cases = set()
+    else:
+        old_requirements = set(old.requirements)
+        old_cases = set(old.testcases)
     new_requirements = set(new.requirements)
     new_cases = set(new.testcases)
     retval = {
