@@ -1,0 +1,10 @@
+{'added': {'requirements': set(), 'testcases': set(), 'testplans': set()},
+ 'changed': {'requirements': {'Priority requirement'},
+             'testcases': set(),
+             'testplans': set()},
+ 'removed': {'requirements': set(),
+             'testcases': {'High priority case'},
+             'testplans': set()},
+ 'unchanged': {'requirements': {'Direct requirement'},
+               'testcases': {'Medium priority case'},
+               'testplans': set()}}
