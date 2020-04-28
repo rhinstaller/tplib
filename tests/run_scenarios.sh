@@ -21,7 +21,15 @@ assertRC() {
 trap cleanup EXIT
 
 for scenario in scenarios/*; do
-    diff.py ${scenario}/{old,new} > ${tmpfile}
+    if [[ ! -e ${scenario}/import/documents.txt ]]; then
+        continue
+    fi
+    if [[ -e ${scenario}/import/diff_rc ]]; then
+        diff_rc=$(cat ${scenario}/import/diff_rc)
+    else
+        diff_rc=0
+    fi
+    assertRC ${diff_rc} diff.py ${scenario}/{old,new} > ${tmpfile}
     diff ${scenario}/import/diff.txt ${tmpfile}
 done
 

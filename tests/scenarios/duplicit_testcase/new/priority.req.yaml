@@ -1,0 +1,5 @@
+name: Priority requirement
+description: |
+  High priority requirement
+verified_by:
+  query: "tc.priority >= 9"

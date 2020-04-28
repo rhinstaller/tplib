@@ -1,0 +1,13 @@
+name: High priority case
+description: |
+  Duplicit test case
+author: pholica@redhat.com
+priority: 3
+execution:
+  type: automated-executable
+  automation_data: |
+    #!/bin/bash
+    exit 12
+instructions:
+  steps:
+    - Some duplicit step

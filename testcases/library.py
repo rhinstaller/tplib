@@ -5,6 +5,16 @@ import fnmatch
 from .structures.testcase import TestCase
 from .structures.requirement import Requirement
 
+class CollisionError(Exception):
+    def __init__(self, message, one, other):
+        super().__init__()
+        self.message = message
+        self.one = one
+        self.other = other
+
+    def __str__(self):
+        return "%s: '%s', '%s'" % (self.message, self.one, self.other)
+
 def _iter_documents(directory, pattern):
     for root, dirs, files in os.walk(directory):
         for filename in files:
@@ -74,6 +84,12 @@ class Library():
         structures = dict()
         for docfile in _iter_documents(directory, pattern):
             structure = cls(docfile, library=self, basedir=directory)
+            try:
+                # try to find if structure of the same id
+                other = structures[structure.id]
+                raise CollisionError("Attempted to load two structures of the same type with the same id (name)", structure.filename, other.filename)
+            except KeyError:
+                pass
             structures[structure.id] = structure
         return structures
 
