@@ -7,51 +7,51 @@ import pprint
 from testcases.library import Library
 from testcases.expressions import eval_bool, eval_str
 
+parser = argparse.ArgumentParser(description='Query and print information about testcases and/or requirements in the testcase library.')
+parser.add_argument(
+    'directory',
+    help="Directory where requirements and testcases are located.",
+)
+parser.add_argument(
+    'query',
+    nargs='?',
+    default="True",
+    help="Jinja expression used for filterling. Use 'i' variable for the item reference. Also 'tc' in case of testcase and 'req' in case of requirement are available.",
+)
+parser.add_argument(
+    'print_query',
+    nargs='?',
+    help="Result of Jinja query to be printed for the queried items."
+)
+selector = parser.add_mutually_exclusive_group()
+selector.add_argument(
+    '-r', '--requirements-only',
+    action="store_true",
+    help="Show requirements only.",
+)
+selector.add_argument(
+    '-t', '--testcases-only',
+    action="store_true",
+    help="Show testcases only.",
+)
+parser.add_argument(
+    '-b', '--brief',
+    action="store_true",
+    help="Show only list of items without details.",
+)
+verbosity = parser.add_mutually_exclusive_group()
+verbosity.add_argument(
+    '-d', '--debug',
+    action="store_true",
+    help="Turn on debugging.",
+)
+verbosity.add_argument(
+    '-q', '--quiet',
+    action="store_true",
+    help="Run in quiet mode: show errors and failures only.",
+)
+
 def main(*in_args):
-    parser = argparse.ArgumentParser(description='Query and print information about testcases and/or requirements in the testcase library.')
-    parser.add_argument(
-        'directory',
-        help="Directory where requirements and testcases are located.",
-    )
-    parser.add_argument(
-        'query',
-        nargs='?',
-        default="True",
-        help="Jinja expression used for filterling. Use 'i' variable for the item reference. Also 'tc' in case of testcase and 'req' in case of requirement are available.",
-    )
-    parser.add_argument(
-        'print_query',
-        nargs='?',
-        help="Result of Jinja query to be printed for the queried items."
-    )
-    selector = parser.add_mutually_exclusive_group()
-    selector.add_argument(
-        '-r', '--requirements-only',
-        action="store_true",
-        help="Show requirements only.",
-    )
-    selector.add_argument(
-        '-t', '--testcases-only',
-        action="store_true",
-        help="Show testcases only.",
-    )
-    parser.add_argument(
-        '-b', '--brief',
-        action="store_true",
-        help="Show only list of items without details.",
-    )
-    ...
-    verbosity = parser.add_mutually_exclusive_group()
-    verbosity.add_argument(
-        '-d', '--debug',
-        action="store_true",
-        help="Turn on debugging.",
-    )
-    verbosity.add_argument(
-        '-q', '--quiet',
-        action="store_true",
-        help="Run in quiet mode: show errors and failures only.",
-    )
     args = parser.parse_args(in_args)
     loglevel = logging.INFO
     logformat = "%(levelname)-8s: %(message)s"

@@ -7,28 +7,28 @@ from pprint import pprint
 
 import testcases.library
 
+parser = argparse.ArgumentParser(description='My awesome app.')
+parser.add_argument(
+    'old',
+    help="Directory containing old library (previous state)",
+)
+parser.add_argument(
+    'new',
+    help="Directory containing new library (desired state)",
+)
+verbosity = parser.add_mutually_exclusive_group()
+verbosity.add_argument(
+    '-d', '--debug',
+    action="store_true",
+    help="Turn on debugging.",
+)
+verbosity.add_argument(
+    '-q', '--quiet',
+    action="store_true",
+    help="Run in quiet mode: show errors and failures only.",
+)
+
 def main(*in_args):
-    parser = argparse.ArgumentParser(description='My awesome app.')
-    parser.add_argument(
-        'old',
-        help="Directory containing old library (previous state)",
-    )
-    parser.add_argument(
-        'new',
-        help="Directory containing new library (desired state)",
-    )
-    ...
-    verbosity = parser.add_mutually_exclusive_group()
-    verbosity.add_argument(
-        '-d', '--debug',
-        action="store_true",
-        help="Turn on debugging.",
-    )
-    verbosity.add_argument(
-        '-q', '--quiet',
-        action="store_true",
-        help="Run in quiet mode: show errors and failures only.",
-    )
     args = parser.parse_args(in_args)
     loglevel = logging.INFO
     logformat = "%(levelname)-8s: %(message)s"

@@ -3,11 +3,17 @@ Query
 =====
 
 Filter and display
-===
+==================
 
-See ``query.py`` tool.
+.. argparse::
+   :filename: ../query.py
+   :func: parser
+   :prog: query.py
 
 Show diff
-===
+=========
 
-See ``diff.py`` tool.
+.. argparse::
+   :filename: ../diff.py
+   :func: parser
+   :prog: diff.py
