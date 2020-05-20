@@ -7,7 +7,7 @@ Filter and display
 
 .. argparse::
    :filename: ../query.py
-   :func: parser
+   :func: cli_parser
    :prog: query.py
 
 Show diff
@@ -15,5 +15,5 @@ Show diff
 
 .. argparse::
    :filename: ../diff.py
-   :func: parser
+   :func: cli_parser
    :prog: diff.py
