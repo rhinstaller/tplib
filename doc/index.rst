@@ -11,6 +11,7 @@ Welcome to testcases's documentation!
    :caption: Contents:
 
    usage/file_structure
+   usage/howto
    usage/query
    classes/library
    classes/testcase
