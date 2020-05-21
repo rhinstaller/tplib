@@ -1,3 +1,5 @@
+.. _file_structure:
+
 ==============
 File structure
 ==============
@@ -19,6 +21,8 @@ Test plan (currently not implemented)
 :class: :py:class:`testcases.structures.testplan.TestPlan`
 :library attribute: ``testplans``
 :yaml structure (TBD):
+
+.. _requirement_structure:
 
 Requirement
 ===========
@@ -47,6 +51,8 @@ Examples
 
 .. literalinclude:: ../../tests/scenarios/removed_testcase/old/priority.req.yaml
    :language: yaml
+
+.. _testcase_structure:
 
 Test case
 =========
