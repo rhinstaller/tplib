@@ -1,6 +1,6 @@
-=====
-Query
-=====
+===========
+Query tools
+===========
 
 Filter and display
 ==================
