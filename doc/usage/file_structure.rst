@@ -2,31 +2,51 @@
 File structure
 ==============
 
-There's no filesystem organization structure and test plans, requirements and
+There's no filesystem organization structure where test plans, requirements and
 test cases are discovered by :py:class:`testcases.library.Library`. All the
 structures should be then accessed through the
 :py:class:`testcases.library.Library` object.
 
 Structures are destinguished by their filename suffix (described below) and
 are available in :py:class:`testcases.library.Library` after successful load.
-the file doesn't contain current structure, there will be error raised during
+If a file doesn't contain correct structure, there will be error raised during
 discovery.
 
-:Test plans (currently not implemented):
+Test plan (currently not implemented)
+=====================================
 
- * suffix: ``.plan.yaml``
- * class: :py:class:`testcases.structures.testplan.TestPlan`
- * library attribute: ``testplans``
- * structure (TBD)
+:suffix: ``.plan.yaml``
+:class: :py:class:`testcases.structures.testplan.TestPlan`
+:library attribute: ``testplans``
+:yaml structure (TBD):
 
-:Requirements:
+Requirement
+===========
 
- * suffix: ``.req.yaml``
- * class: :py:class:`testcases.structures.requirement.Requirement`
- * library attribute: ``requirements``
- * structure:
+:suffix: ``.req.yaml``
+:class: :py:class:`testcases.structures.requirement.Requirement`
+:library attribute: ``requirements``
+:yaml structure:
 
-   *
+   * **name** (`str`, `unique`) --
+   * **description** (`str`) --
+   * **tags** (`list`) --
+   * **verified_by** (`dict` - :py:class:`testcases.structures.requirement.AcceptanceCriteria`)
+
+     :one of:
+      * **direct_list** (`list`) -- List of testcases names
+      * **query** (`str`) -- Jinja2 expression, see more here: TBD
+
+   * **acceptance_criteria** (`dict`) --
+
+Examples
+--------
+
+.. literalinclude:: ../../tests/scenarios/removed_testcase/old/direct.req.yaml
+   :language: yaml
+
+.. literalinclude:: ../../tests/scenarios/removed_testcase/old/priority.req.yaml
+   :language: yaml
 
 Test case
 =========
