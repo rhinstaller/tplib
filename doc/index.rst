@@ -10,6 +10,7 @@ Welcome to testcases's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+   usage/file_structure
    usage/query
    classes/library
    classes/testcase
