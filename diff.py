@@ -5,7 +5,7 @@ import argparse
 import logging
 from pprint import pprint
 
-import testcases.library
+import tclib.library
 
 def cli_parser():
     parser = argparse.ArgumentParser(description='My awesome app.')
@@ -44,9 +44,9 @@ def main(*in_args):
         format=logformat,
     )
     ...
-    o = testcases.library.Library(args.old)
-    n = testcases.library.Library(args.new)
-    pprint(testcases.library.diff(o, n))
+    o = tclib.library.Library(args.old)
+    n = tclib.library.Library(args.new)
+    pprint(tclib.library.diff(o, n))
 
 if __name__ == "__main__":
     sys.exit(main(*sys.argv[1:]))

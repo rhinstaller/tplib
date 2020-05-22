@@ -17,7 +17,7 @@ sys.path.insert(0, os.path.abspath('..'))
 
 # -- Project information -----------------------------------------------------
 
-project = 'testcases'
+project = 'tclib'
 copyright = '2020, Pavel Holica'
 author = 'Pavel Holica'
 

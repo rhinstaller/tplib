@@ -1,9 +1,9 @@
-.. testcases documentation master file, created by
+.. tclib documentation master file, created by
    sphinx-quickstart on Mon May 18 12:49:05 2020.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to testcases's documentation!
+Welcome to tclib's documentation!
 =========================================
 
 .. toctree::

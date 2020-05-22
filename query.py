@@ -4,8 +4,8 @@ import sys
 import argparse
 import logging
 import pprint
-from testcases.library import Library
-from testcases.expressions import eval_bool, eval_str
+from tclib.library import Library
+from tclib.expressions import eval_bool, eval_str
 
 def cli_parser():
     parser = argparse.ArgumentParser(
