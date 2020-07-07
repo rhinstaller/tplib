@@ -4,16 +4,7 @@ import fnmatch
 
 from .structures.testcase import TestCase
 from .structures.requirement import Requirement
-
-class CollisionError(Exception):
-    def __init__(self, message, one, other):
-        super().__init__()
-        self.message = message
-        self.one = one
-        self.other = other
-
-    def __str__(self):
-        return "%s: '%s', '%s'" % (self.message, self.one, self.other)
+from .exceptions import CollisionError
 
 def _iter_documents(directory, pattern):
     for root, dirs, files in os.walk(directory):
