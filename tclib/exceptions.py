@@ -7,3 +7,24 @@ class CollisionError(Exception):
 
     def __str__(self):
         return "%s: '%s', '%s'" % (self.message, self.one, self.other)
+
+class UnknownParentError(Exception):
+    """
+    Raised in DataObject constructor when the object has specified parent
+    but no such parent can be found in provided library.
+
+    :param structure_desc: Description of the structure for which the parent couldn't be found.
+    :type structure_desc: str
+    :param parent_spec: Specification of the parent which couldn't be found.
+    :type parent_spec: str
+    """
+    def __init__(self, structure_desc, parent_spec):
+        super().__init__()
+        self.structure_desc = structure_desc
+        self.parent = parent_spec
+
+    def __str__(self):
+        return "Cannot find parent '%s' for '%s'" % (
+            self.parent_spec,
+            self.structure_desc,
+        )
