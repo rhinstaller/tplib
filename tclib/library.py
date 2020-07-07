@@ -4,7 +4,7 @@ import fnmatch
 
 from .structures.testcase import TestCase
 from .structures.requirement import Requirement
-from .exceptions import CollisionError
+from .exceptions import CollisionError, UnknownParentError, DocfilesError
 
 def _iter_documents(directory, pattern):
     for root, dirs, files in os.walk(directory):
@@ -72,16 +72,36 @@ class Library():
         return self._load_structures(self.directory, '*.req.yaml', Requirement)
 
     def _load_structures(self, directory, pattern, cls):
+        """
+        Load structures strored in files of name matching ``pattern`` from
+        provided ``directory`` and use the ``cls`` to construct them.
+
+        The structures are loaded in greedy way and in case there's an error
+        which prevents constructing the structure, it's skipped and retried
+        loading later (hoping that there's the missing information now present).
+        """
         structures = dict()
-        for docfile in _iter_documents(directory, pattern):
-            structure = cls(docfile, library=self, basedir=directory)
-            try:
-                # try to find if structure of the same id
-                other = structures[structure.id]
-                raise CollisionError("Attempted to load two structures of the same type with the same id (name)", structure.filename, other.filename)
-            except KeyError:
-                pass
-            structures[structure.id] = structure
+        docfiles = list(_iter_documents(directory, pattern))
+        while docfiles:
+            docfile_loaded = False
+            for docfile in copy(docfiles):
+                try:
+                    structure = cls(docfile, library=self, basedir=directory)
+                except UnknownParentError:
+                    continue
+                try:
+                    # try to find if structure of the same id
+                    other = structures[structure.id]
+                    raise CollisionError("Attempted to load two structures of the same type with the same id (name)", structure.filename, other.filename)
+                except KeyError:
+                    pass
+                structures[structure.id] = structure
+                docfiles.remove(docfile)
+                docfile_loaded = True
+            if not docfile_loaded:
+                break
+        if docfiles:
+            raise DocfilesError(docfiles)
         return structures
 
     def _calculate_and_stabilize_structures(self, structures):

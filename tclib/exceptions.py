@@ -28,3 +28,13 @@ class UnknownParentError(Exception):
             self.parent_spec,
             self.structure_desc,
         )
+
+class DocfilesError(Exception):
+    def __init__(self, docfiles):
+        super().__init__()
+        self.docfiles = docfiles
+
+    def __str__(self):
+        return "Couldn't process following docfiles: %s" % ', '.join([
+            "'%s'" % docfile for docfile in docfiles
+        ])
