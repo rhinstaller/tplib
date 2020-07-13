@@ -14,42 +14,88 @@ are available in :py:class:`testcases.library.Library` after successful load.
 If a file doesn't contain correct structure, there will be error raised during
 discovery.
 
-Test plan (currently not implemented)
-=====================================
+.. _testplan_structure:
+
+Test plan
+=========
 
 :suffix: ``.plan.yaml``
-:class: :py:class:`testcases.structures.testplan.TestPlan`
+:class: :py:class:`tclib.structures.testplan.TestPlan`
 :library attribute: ``testplans``
-:yaml structure (TBD):
+:yaml structure:
+
+  * **name** (`str`, `unique`) --
+  * **description** (`str`, `optional`) --
+  * **point_person** (`str`, `inherited`) --
+  * **tags** (`set`, `inherited`, `optional`) --
+  * **artifact_type** (`str`, `inherited`) --
+  * **execute_on** (`list`, `inherited`) --
+
+    * **type** (`str`) --
+    * **filter** (`str`) --
+
+  * **parent_plan** (`str`, `optional`) --
+  * **verified_by** (`dict` - :py:class:`tclib.structures.testplan.Selection`, `optional`)
+
+    * **test_cases** (`dict` - :py:class:`tclib.structures.testplan.QueryObject`, `optional`)
+
+      * **direct_list** (`list`) -- List of testcase names
+      * **query** (`str`) -- Jinja2 expression, see more here: TBD
+      * **named_query** (`str`) -- Reference to query, not implemented
+
+    * **requirements** (`dict` - :py:class:`tclib.structures.testplan.QueryObject`, `optional`)
+
+      * **direct_list** (`list`) -- List of requirement names
+      * **query** (`str`) -- Jinja2 expression, see more here: TBD
+      * **named_query** (`str`) -- Reference to query, not implemented
+
+  * **acceptance_criteria** (`dict` - :py:class:`tclib.structures.testplan.Selection`, `optional`) -- Same as **verified_by**
+  * **reporting** (`list`, `inherited`)
+
+    * **type** (`str`) --
+    * **condition** (`str`) --
+    * **template** (`str`) --
+
+  * **configurations** (`list`, `inherited`, `optional`) --
+  * **document** (`str`, `optional`) --
 
 .. _requirement_structure:
+
+Examples
+--------
+
+.. literalinclude:: ../../examples/testplans/testplan-main-1.plan.yaml
+   :language: yaml
+
+.. literalinclude:: ../../examples/testplans/testplan-sub-1.plan.yaml
+   :language: yaml
 
 Requirement
 ===========
 
 :suffix: ``.req.yaml``
-:class: :py:class:`testcases.structures.requirement.Requirement`
+:class: :py:class:`tclib.structures.requirement.Requirement`
 :library attribute: ``requirements``
 :yaml structure:
 
-   * **name** (`str`, `unique`) --
-   * **description** (`str`) --
-   * **tags** (`list`) --
-   * **verified_by** (`dict` - :py:class:`testcases.structures.requirement.AcceptanceCriteria`)
+  * **name** (`str`, `unique`) --
+  * **description** (`str`, `optional`) --
+  * **tags** (`list`) --
+  * **verified_by** (`dict` - :py:class:`tclib.structures.requirement.QueryObject`, `optional`)
 
-     :one of:
-      * **direct_list** (`list`) -- List of testcases names
-      * **query** (`str`) -- Jinja2 expression, see more here: TBD
+    * **direct_list** (`list`) -- List of testcase names
+    * **query** (`str`) -- Jinja2 expression, see more here: TBD
+    * **named_query** (`str`) -- Reference to query, not implemented
 
-   * **acceptance_criteria** (`dict`) --
+  * **acceptance_criteria** (`dict` - :py:class:`tclib.structures.requirement.QueryObject`, `optional`) -- Same as **verified_by**
 
 Examples
 --------
 
-.. literalinclude:: ../../tests/scenarios/removed_testcase/old/direct.req.yaml
+.. literalinclude:: ../../examples/requirements/requirement-first.req.yaml
    :language: yaml
 
-.. literalinclude:: ../../tests/scenarios/removed_testcase/old/priority.req.yaml
+.. literalinclude:: ../../examples/requirements/requirement-priority.req.yaml
    :language: yaml
 
 .. _testcase_structure:
@@ -57,7 +103,7 @@ Examples
 Test case
 =========
 :suffix: ``.tc.yaml``
-:class: :py:class:`testcases.structures.testcase.TestCase`
+:class: :py:class:`tclib.structures.testcase.TestCase`
 :library attribute: ``testcases``
 :yaml structure:
 
@@ -80,9 +126,9 @@ Test case
      in case of `manual` for purposes of some upcoming automation.
 
  * **filter** (`list`, `optional`) -- TBD
- * **instructions** (`dict` - :py:class:`testcases.structures.testcase.Instructions`)
+ * **instructions** (`dict` - :py:class:`tclib.structures.testcase.Instructions`)
 
-   * **setup** (`list`, `optional`) -- list of :py:class:`testcases.structures.testcase.Instruction`
+   * **setup** (`list`, `optional`) -- list of :py:class:`tclib.structures.testcase.Instruction`
 
      :variable item (full):
       * **step** (`str`) --
@@ -100,8 +146,11 @@ Test case
 Examples
 --------
 
-.. literalinclude:: ../../tests/scenarios/removed_testcase/old/high.tc.yaml
+.. literalinclude:: ../../examples/testcases/testcase-manual-1.tc.yaml
    :language: yaml
 
-.. literalinclude:: ../../tests/scenarios/removed_testcase/old/medium.tc.yaml
+.. literalinclude:: ../../examples/testcases/testcase-automated-1.tc.yaml
+   :language: yaml
+
+.. literalinclude:: ../../examples/testcases/testcase-disabled-1.tc.yaml
    :language: yaml

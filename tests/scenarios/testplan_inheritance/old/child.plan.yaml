@@ -1,0 +1,20 @@
+name: child 1
+description: |
+  Test
+point_person: zveleba@redhat.com
+tags:
+  - foo_tag
+artifact_type: compose
+execute_on:
+  - type: snapshot
+    filter:
+parent_plan:
+reporting:
+  - type: email
+    condition:
+    template: |
+      email template
+configurations:
+  - arch: x86_64
+document: |
+  Test

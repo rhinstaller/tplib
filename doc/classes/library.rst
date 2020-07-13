@@ -2,6 +2,6 @@
 Library
 =======
 
-.. automodule:: testcases.library
+.. automodule:: tclib.library
    :members:
    :undoc-members:

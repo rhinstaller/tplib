@@ -4,7 +4,10 @@ import fnmatch
 
 from .structures.testcase import TestCase
 from .structures.requirement import Requirement
+from .structures.testplan import TestPlan
 from .exceptions import CollisionError, UnknownParentError, DocfilesError
+from .expressions import eval_bool
+
 
 def _iter_documents(directory, pattern):
     for root, dirs, files in os.walk(directory):
@@ -16,19 +19,22 @@ def diff(old, new):
     if old is None:
         old_requirements = set()
         old_cases = set()
+        old_testplans = set()
     else:
         old_requirements = set(old.requirements)
         old_cases = set(old.testcases)
+        old_testplans = set(old.testplans)
     new_requirements = set(new.requirements)
     new_cases = set(new.testcases)
+    new_testplans = set(new.testplans)
     retval = {
         "removed" : {
-            "testplans" : set(),
+            "testplans" : old_testplans.difference(new_testplans),
             "requirements" : old_requirements.difference(new_requirements),
             "testcases" : old_cases.difference(new_cases),
         },
         "added" : {
-            "testplans" : set(),
+            "testplans" : new_testplans.difference(old_testplans),
             "requirements" : new_requirements.difference(old_requirements),
             "testcases" : new_cases.difference(old_cases),
         },
@@ -38,16 +44,15 @@ def diff(old, new):
             "testcases" : set(),
         },
         "unchanged" : {
-            "testplans" : set(),
+            "testplans" : old_testplans.intersection(new_testplans),
             "requirements" : old_requirements.intersection(new_requirements),
             "testcases" : old_cases.intersection(new_cases),
         },
     }
-    # WILL ACTIVATE LATER WHEN TESTPLANS ARE ADDED
-    #for testplan_id in copy(retval["unchanged"]["testplans"]):
-    #    if old.testplans[testplan_id] != new.testplans[testplan_id]:
-    #        retval["unchanged"]["testplans"].remove(testplan_id)
-    #        retval["changed"]["testplans"].add(testplan_id)
+    for testplan_id in copy(retval["unchanged"]["testplans"]):
+        if old.testplans[testplan_id] != new.testplans[testplan_id]:
+            retval["unchanged"]["testplans"].remove(testplan_id)
+            retval["changed"]["testplans"].add(testplan_id)
     for requirement_id in copy(retval["unchanged"]["requirements"]):
         if old.requirements[requirement_id] != new.requirements[requirement_id]:
             retval["unchanged"]["requirements"].remove(requirement_id)
@@ -61,9 +66,13 @@ def diff(old, new):
 class Library():
     def __init__(self, directory):
         self.directory = directory
+        self.testplans = self._load_testplans()
         self.testcases = self._load_testcases()
         self.requirements = self._load_requirements()
         self._calculate_and_stabilize()
+
+    def _load_testplans(self):
+        return self._load_structures(self.directory, '*.plan.yaml', TestPlan)
 
     def _load_testcases(self):
         return self._load_structures(self.directory, '*.tc.yaml', TestCase)
@@ -86,7 +95,7 @@ class Library():
             docfile_loaded = False
             for docfile in copy(docfiles):
                 try:
-                    structure = cls(docfile, library=self, basedir=directory)
+                    structure = cls(docfile, library=self, basedir=directory, possible_parents=structures)
                 except UnknownParentError:
                     continue
                 try:
@@ -117,3 +126,120 @@ class Library():
     def _calculate_and_stabilize(self):
         self._calculate_and_stabilize_structures(self.requirements)
         self._calculate_and_stabilize_structures(self.testcases)
+        self._calculate_and_stabilize_structures(self.testplans)
+
+    # Lookups
+    def getTestCasesByNames(self, names, get_from=None):
+        """ Finds testcases based on list of names
+
+        :param names: List of testcase names
+        :type names: list
+        :param get_from: where to look for testcases, defaults to self.testcases
+        :type get_from: set or list, optional
+        :return: set of found testcases
+        :rtype: set
+
+        """
+        if get_from is None:
+            get_from = self.testcases.values()
+        return self._names_to_objects(names, get_from)
+
+    def getRquirementsByNames(self, names, get_from=None):
+        """ Finds requirements based on list of names
+
+        :param names: List of requirement names
+        :type names: list
+        :param get_from:  where to look for requirements, defaults to self.requirements
+        :type get_from: set or list, optional
+        :return: set of found requirements
+        :rtype: set
+        """
+        if get_from is None:
+            get_from = self.requirements.values()
+        return self._names_to_objects(names, get_from)
+
+    def _names_to_objects(self, names, get_from):
+        """ Finds objects from get_from based on list of names, raises KeyError if object of the name cannot be find.
+
+        :param names: List of object names
+        :type names: list
+        :param get_from:  where to look for objects
+        :type get_from: dict
+        :raises KeyError: name in list doesn't correspond to any object in get_from
+        :return: set of found objects
+        :rtype: set
+        """
+        get_from = { item.name : item for item in get_from }
+        return { get_from[name] for name in names }
+
+    def getRequirementsByQuery(self, query, get_from=None, **kwargs):
+        """ Finds requirements based on query, any extra arguments are handover to template.render(),
+        reference to object calling this function is expected, for example when called from testplan
+        add tp=self
+
+        :param query: jinja2 expression
+        :type query: str
+        :param get_from: where to look for requirements, defaults to self.requirements.values()
+        :type get_from: list or set
+        :return: set of found requirements
+        :rtype: set
+        """
+        if query is None:
+            return set()
+
+        if get_from is None:
+            get_from = self.requirements.values()
+
+        return { requirement for requirement in get_from if eval_bool(query, req=requirement, **kwargs) }
+
+    def getTestCasesByQuery(self, query, get_from=None, **kwargs):
+        """ Finds testcases based on query, any extra arguments are handover to template.render(),
+        reference to object calling this function is expected, for example when called from testplan
+        add tp=self
+
+        :param query: jinja2 expression
+        :type query: str
+        :param get_from: where to look for testcases, defaults to self.testcases.values()
+        :type get_from: list or set
+        :return: set of found testcases
+        :rtype: set
+        """
+        if query is None:
+            return set()
+
+        if get_from is None:
+            get_from = self.testcases.values()
+
+        return { testcase for testcase in get_from if eval_bool(query, tc=testcase, **kwargs) }
+
+    def getRequirementsByNamedQuery(self, query_name, get_from=None, **kwargs):
+        """ Finds requirements based on query, any extra arguments are handover to template.render(),
+        reference to object calling this function is expected, for example when called from testplan
+        add tp=self
+
+        :param query_name: Name of query
+        :type query_name: str
+        :param get_from: where to look for requirements, defaults to self.requirements.values()
+        :type get_from: list or set
+        :return: set of found requirements
+        :rtype: set
+        """
+        if query_name is None:
+            return set()
+        raise RuntimeError('named_query is not implemented')
+
+    def getTestCasesByNamedQuery(self, query_name, get_from=None, **kwargs):
+        """ Finds testcases based on query, any extra arguments are handover to template.render(),
+        reference to object calling this function is expected, for example when called from testplan
+        add tp=self
+
+        :param query_name: Name of query
+        :type query_name: str
+        :param get_from: where to look for testcases, defaults to self.testcases.values()
+        :type get_from: list or set
+        :return: set of found testcases
+        :rtype: set
+        """
+        if query_name is None:
+            return set()
+        raise RuntimeError('named_query is not implemented')

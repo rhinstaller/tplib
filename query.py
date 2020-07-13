@@ -4,8 +4,11 @@ import sys
 import argparse
 import logging
 import pprint
+from collections import OrderedDict
 from tclib.library import Library
 from tclib.expressions import eval_bool, eval_str
+
+# ordered dict
 
 def cli_parser():
     parser = argparse.ArgumentParser(
@@ -53,6 +56,11 @@ Examples:
         action="store_true",
         help="Show testcases only.",
     )
+    selector.add_argument(
+        '-p', '--testplans_only',
+        action="store_true",
+        help="Show testplans only.",
+    )
     parser.add_argument(
         '-b', '--brief',
         action="store_true",
@@ -85,8 +93,8 @@ def main(*in_args):
         format=logformat,
     )
     library = Library(args.directory)
-    if not args.testcases_only:
-        for requirement in library.requirements.values():
+    if not args.testcases_only and not args.testplans_only:
+        for _, requirement in sorted(library.requirements.items()):
             if eval_bool(args.query, i=requirement, req=requirement):
                 if args.print_query is not None:
                     print(eval_str(args.print_query, i=requirement, req=requirement))
@@ -94,8 +102,8 @@ def main(*in_args):
                     print(repr(requirement))
                 else:
                     print(requirement.dump())
-    if not args.requirements_only:
-        for testcase in library.testcases.values():
+    if not args.requirements_only and not args.testplans_only:
+        for _, testcase in sorted(library.testcases.items()):
             if eval_bool(args.query, i=testcase, tc=testcase):
                 if args.print_query is not None:
                     print(eval_str(args.print_query, i=testcase, tc=testcase))
@@ -103,6 +111,15 @@ def main(*in_args):
                     print(repr(testcase))
                 else:
                     print(testcase.dump())
+    if not args.requirements_only and not args.testcases_only:
+        for _, testplan in sorted(library.testplans.items()):
+            if eval_bool(args.query, i=testplan, tp=testplan):
+                if args.print_query is not None:
+                    print(eval_str(args.print_query, i=testplan, tp=testplan))
+                elif args.brief:
+                    print(repr(testplan))
+                else:
+                    print(testplan.dump())
 
 if __name__ == "__main__":
     sys.exit(main(*sys.argv[1:]))

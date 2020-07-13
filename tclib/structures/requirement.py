@@ -1,77 +1,66 @@
 import functools
 from . import Mapping as m
 from .data_object import DataObject, DocumentObject, ListObject
-from ..expressions import eval_bool
 
-class VerifiedBy(DataObject):
+class QueryObject(DataObject):
     mapping = dict((
-        m('direct_list', required=False, default=(), func=list),
-        m('query', required=False),
-    ))
-
-
-class AcceptanceCriteria(DataObject):
-    mapping = dict((
-        m('direct_list', required=False, default=(), func=list),
+        m('direct_list', required=False, func=list, default=()),
         m('query', required=False),
         m('named_query', required=False),
     ))
 
-
 class Requirement(DocumentObject):
     mapping = dict((
         m('name'),
-        m('description'),
+        m('description', required=False),
         m('tags', required=False, default=(), func=set),
-        m('verified_by', func=VerifiedBy),
-        m('acceptance_criteria', required=False, default=(), func=dict),
+        m('verified_by', required=False, func=QueryObject),
+        m('acceptance_criteria', required=False, func=QueryObject),
     ))
     runtime_properties = [
         'verificationTestCases',
+        'acceptanceTestCases',
     ]
 
-    def __init__(self, data, parent=None, library=None, basedir=None):
-        self.verificationTestCases = []
-        super().__init__(data, parent=parent, library=library, basedir=basedir)
+    def __init__(self, data, library=None, basedir=None, possible_parents=None):
+        self.verificationTestCases = set()
+        self.acceptanceTestCases = set()
+        super().__init__(data, library=library, basedir=basedir, possible_parents=possible_parents)
+
+    def stabilize(self):
+        # Get verificationTestCases
+        self.verificationTestCases |= self.library.getTestCasesByNames(self.verified_by.direct_list)
+        self.verificationTestCases |= self.library.getTestCasesByQuery(self.verified_by.query, req=self)
+        self.verificationTestCases |= self.library.getTestCasesByNamedQuery(self.verified_by.named_query, req=self)
+
+        # Get acceptanceTestCases from verificationTestCases
+        self.acceptanceTestCases |= self.library.getTestCasesByNames(self.acceptance_criteria.direct_list, get_from=self.verificationTestCases)
+        self.acceptanceTestCases |= self.library.getTestCasesByQuery(self.acceptance_criteria.query, get_from=self.verificationTestCases, tp=self)
+        self.acceptanceTestCases |= self.library.getTestCasesByNamedQuery(self.acceptance_criteria.named_query, get_from=self.verificationTestCases, tp=self)
+
+        # Mark tescases
+        for testcase in self.verificationTestCases:
+            testcase.verifiesRequirement.append(self)
 
     @property
     def id(self):
         return self.name
 
-    def stabilize(self):
-        for query_type, query in self.verified_by.data.items():
-            if query is None:
-                continue
-            for testcase in self._findVerificationCases(query_type, query):
-                testcase.verifiesRequirement.append(self)
-                self.verificationTestCases.append(testcase)
-        return True
-
-    def _directListCases(self, cases_list):
-        return [ self.library.testcases[case_name] for case_name in cases_list ]
-
-    def _directQueryCases(self, query):
-        return [ testcase for testcase in self.library.testcases.values() if eval_bool(query, tc=testcase, req=self) ]
-
-    def _namedQueryCases(self, query_name):
-        raise Exception('NOT IMPLEMENTED')
-
-    def _findVerificationCases(self, query_type, query):
-        methods = {
-            'direct_list' : self._directListCases,
-            'query' : self._directQueryCases,
-            'named_query' : self._namedQueryCases,
-        }
-        try:
-            return methods[query_type](query)
-        except KeyError:
-            raise ValueError("Unknown query type: '%s'" % query_type)
+    def __hash__(self):
+        return hash((type(self), self._name, id(self.library)))
 
     def __eq__(self, other):
         if type(self) != type(other):
             return NotImplemented
         if self.data != other.data:
             return False
-        if { tc.id for tc in self.verificationTestCases } != { tc.id for tc in other.verificationTestCases }:
-            return False
+
+        checked_references = [
+            'verificationTestCases',
+            'acceptanceTestCases'
+        ]
+
+        for ref in checked_references:
+            if { req.id for req in getattr(self, ref) } != { req.id for req in getattr(other, ref) }:
+                return False
         return True

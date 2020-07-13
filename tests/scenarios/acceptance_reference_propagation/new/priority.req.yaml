@@ -1,0 +1,9 @@
+name: Priority requirement
+verified_by:
+  direct_list:
+    - Medium priority case
+acceptance_criteria:
+  direct_list:
+    - Medium priority case
+description: |
+  High priority requirement

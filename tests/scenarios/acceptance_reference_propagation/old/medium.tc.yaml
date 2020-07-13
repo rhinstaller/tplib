@@ -1,0 +1,10 @@
+name: Medium priority case
+description: |
+  Medium priority test case
+author: pholica@redhat.com
+priority: 7
+execution:
+  type: manual
+instructions:
+  steps:
+    - Some step

@@ -16,6 +16,7 @@ Welcome to tclib's documentation!
    classes/library
    classes/testcase
    classes/requirement
+   classes/testplan
 
 Indices and tables
 ==================

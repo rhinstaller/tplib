@@ -1,6 +1,10 @@
 import os
 import yaml
+import copy
 from abc import ABC, abstractmethod
+from ..exceptions import UnknownParentError
+from ..expressions import eval_bool
+
 
 ## BEGIN OF VERY VERY VERY POOR PLACE FOR MODIFYING YAML DUMP BEHAVIOUR
 ## Multiline strings should be formatted using '|' character
@@ -37,14 +41,34 @@ class DataObject(ABC):
     mapping = dict()
     runtime_properties = []
     allow_nonstandard_values = True
+    parent_key_name = None
+    default_data = {}
 
-    def __init__(self, data, parent=None, library=None):
+    def __init__(self, data, library=None, possible_parents=None):
         self.data = {}
-        self.parent = parent
+        self.parent = None
         self.library = library
+
+        if data is None:
+            data = copy.deepcopy(self.default_data)
+
+        self._getParent(data, possible_parents)
+
         data = self.feed(data)
         if data:
             raise GarbageData(self, data)
+
+    def _getParent(self, data, possible_parents):
+        # Try to get reference to parent object
+        if possible_parents is None:
+            possible_parents = {}
+        if self.parent_key_name is not None:
+            parent_name = data[self.parent_key_name]
+            if parent_name is not None:
+                try:
+                    self.parent = possible_parents[parent_name]
+                except KeyError:
+                    raise UnknownParentError('', self.parent_key_name)
 
     def _autofeed(self, data):
         for mapping in self.mapping.values():
@@ -127,7 +151,6 @@ class DataObject(ABC):
         #    if getattr(self, prop) != getattr(other, prop):
         #        return False
         return True
-
 
     def __ne__(self, other):
         if type(self) != type(other):
@@ -219,7 +242,10 @@ class DataObject(ABC):
     def serialize(self):
         return { key : serialize_value(value) for key, value in self.data.items() if self._should_serialize_item(key) }
 
+
 class ListObject(DataObject):
+    default_data = []
+
     @property
     def _name(self):
         return self.name
@@ -236,7 +262,7 @@ class ListObject(DataObject):
 
 
 class DocumentObject(DataObject):
-    def __init__(self, filename, override_data=None, parent=None, library=None, basedir=None):
+    def __init__(self, filename, override_data=None, library=None, basedir=None, possible_parents=None):
         self.filename = filename
         self.basedir = basedir
         if self.basedir is not None:
@@ -245,7 +271,7 @@ class DocumentObject(DataObject):
         if override_data is None:
             with open(filename) as testcase_fo:
                 data = yaml.safe_load(testcase_fo)
-        super().__init__(data, parent, library)
+        super().__init__(data, library=library, possible_parents=possible_parents)
 
     def toYaml(self):
         return yaml.safe_dump(self.serialize(), sort_keys=False)

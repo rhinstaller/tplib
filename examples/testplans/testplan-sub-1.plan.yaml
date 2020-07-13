@@ -1,0 +1,35 @@
+name: testplan sub 1
+description: |
+  Simple testplan
+point_person: zveleba@redhat.com
+tags:
+  - foo_tag
+  - bar_tag
+artifact_type: compose
+execute_on:
+  - type: snapshot
+    filter:
+parent_plan: testplan main 1
+verified_by:
+  test_cases:
+    direct_list:
+      - testing case (automated)
+  requirements:
+    direct_list:
+      - First requirement
+reporting:
+  - type: email
+    condition:
+    template: |
+      email template
+acceptance_criteria:
+  test_cases:
+    direct_list:
+      - testing case (automated)
+  requirements:
+    direct_list:
+      - First requirement
+document: |
+  reference to a test plan document template
+  the content used to generate a test plan document
+  *requirement:* automatically insert information about tested requirement

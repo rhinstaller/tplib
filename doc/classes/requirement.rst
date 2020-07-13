@@ -4,7 +4,7 @@
 Requirement
 ===========
 
-.. automodule:: testcases.structures.requirement
+.. automodule:: tclib.structures.requirement
    :members:
    :undoc-members:
 

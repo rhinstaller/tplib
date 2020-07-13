@@ -7,6 +7,8 @@ tags:
   - bar_tag
 verified_by:
   direct_list:
+    - testing case (disabled)
+    - testing case (automated)
     - testing case (manual)
 acceptance_criteria:
   direct_list:

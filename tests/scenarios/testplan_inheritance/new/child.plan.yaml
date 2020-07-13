@@ -1,0 +1,8 @@
+name: child 1
+description: |
+  Test
+parent_plan: parent 1
+verified_by:
+acceptance_criteria:
+document: |
+  Test

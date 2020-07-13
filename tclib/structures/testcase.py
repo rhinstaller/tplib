@@ -45,23 +45,26 @@ class TestCase(DocumentObject):
         m('description'),
         m('priority', allowed_types=int),
         m('execution', allowed_types=dict),
-        m('filter', required=False, default=[], allowed_types=list),
+        m('filter', required=False, default=(), func=list),
         m('instructions', func=Instructions),
         m('configurations', required=False, default=None, allowed_types=(list,type(None))),
         m('author', required=False),
-        m('tags', required=False, default=[], func=set)
+        m('tags', required=False, default=(), func=set)
     ))
     runtime_properties = [
         'verifiesRequirement',
     ]
 
-    def __init__(self, data, parent=None, library=None, basedir=None):
-        super().__init__(data, parent, library, basedir=basedir)
+    def __init__(self, data, library=None, basedir=None, possible_parents=None):
+        super().__init__(data, library=library, basedir=basedir, possible_parents=possible_parents)
         self.verifiesRequirement = []
 
     @property
     def id(self):
         return self.name
+
+    def __hash__(self):
+        return hash((type(self), self._name, id(self.library)))
 
     def __eq__(self, other):
         if type(self) != type(other):
