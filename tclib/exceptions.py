@@ -21,7 +21,7 @@ class UnknownParentError(Exception):
     def __init__(self, structure_desc, parent_spec):
         super().__init__()
         self.structure_desc = structure_desc
-        self.parent = parent_spec
+        self.parent_spec = parent_spec
 
     def __str__(self):
         return "Cannot find parent '%s' for '%s'" % (
@@ -36,5 +36,5 @@ class DocfilesError(Exception):
 
     def __str__(self):
         return "Couldn't process following docfiles: %s" % ', '.join([
-            "'%s'" % docfile for docfile in docfiles
+            "'%s'" % docfile for docfile in self.docfiles
         ])
