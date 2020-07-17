@@ -6,7 +6,7 @@ class Instruction(DataObject):
     default_result = 'Success'
     mapping = dict((
         m('step'),
-        m('result', required=False, default='', allowed_types=str),
+        m('result', required=False, default=default_result, allowed_types=str),
     ))
     def feed(self, data):
         if isinstance(data, str):
