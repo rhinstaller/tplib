@@ -227,6 +227,8 @@ class DataObject(ABC):
         return bool(self.data)
 
     def _should_serialize_item(self, item):
+        if item.startswith('x-'):
+            return True
         mapping = self.mapping[item]
         if mapping.required:
             return True
