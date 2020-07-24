@@ -1,4 +1,3 @@
-import functools
 from . import Mapping as m
 from .data_object import DataObject, DocumentObject, ListObject
 
@@ -26,16 +25,23 @@ class Phase(ListObject):
         self.data = [ Instruction(item) for item in data ]
         data.clear()
 
+class SetupPhase(Phase):
+    def __init__(self, data):
+        super().__init__("setup", data)
+
+class StepsPhase(Phase):
+    def __init__(self, data):
+        super().__init__("setup", data)
+
+class TeardownPhase(Phase):
+    def __init__(self, data):
+        super().__init__("setup", data)
 
 class Instructions(DataObject):
     mapping = dict((
-        m('setup', required=False, default=[],
-          func=functools.partial(Phase, 'setup'),
-        ),
-        m('steps', func=functools.partial(Phase, 'steps')),
-        m('teardown', required=False, default=[],
-          func=functools.partial(Phase, 'teardown')
-        ),
+        m('setup', required=False, default=[], func=SetupPhase),
+        m('steps', func=StepsPhase),
+        m('teardown', required=False, default=[], func=TeardownPhase),
     ))
 
 
