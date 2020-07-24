@@ -38,3 +38,8 @@ class DocfilesError(Exception):
         return "Couldn't process following docfiles: %s" % ', '.join([
             "'%s'" % docfile for docfile in self.docfiles
         ])
+
+class GarbageData(Exception):
+    def __init__(self, instance, data):
+        message = "%s in %s document contains additional unexpected data: %s"
+        super().__init__(message % (type(instance), instance.document.filename, data))

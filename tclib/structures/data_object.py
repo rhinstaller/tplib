@@ -2,7 +2,7 @@ import os
 import yaml
 import copy
 from abc import ABC, abstractmethod
-from ..exceptions import UnknownParentError
+from ..exceptions import UnknownParentError, GarbageData
 from ..expressions import eval_bool
 
 
@@ -32,10 +32,6 @@ def serialize_value(value):
         return list(value)
     return value
 
-class GarbageData(Exception):
-    def __init__(self, instance, data):
-        message = "%s document contains additional unexpected data: %s"
-        super().__init__(message % (type(instance), data))
 
 class DataObject(ABC):
     mapping = dict()
@@ -44,10 +40,11 @@ class DataObject(ABC):
     parent_key_name = None
     default_data = {}
 
-    def __init__(self, data, library=None, possible_parents=None):
+    def __init__(self, data, library=None, possible_parents=None, document=None):
         self.data = {}
         self.parent = None
         self.library = library
+        self.document = document
 
         if data is None:
             data = copy.deepcopy(self.default_data)
@@ -93,9 +90,13 @@ class DataObject(ABC):
                 # transform value desired way if desired or check allowed types
                 # if no transformation should be done
                 if mapping.func is not None:
-                    value = mapping.func(value)
+                    if issubclass(mapping.func, DataObject):
+                        value = mapping.func(value, document=self.document)
+                    else:
+                        value = mapping.func(value)
                 elif not isinstance(value, mapping.allowed_types):
-                    raise TypeError("Wrong type of: %s. Expected one of: %s, was: %s" % (mapping.name, mapping.allowed_types, type(value)))
+                    raise TypeError("%s: Wrong type of: %s. Expected one of: %s, was: %s" % (self.document.filename, mapping.name,
+                                                                                             mapping.allowed_types, type(value)))
                 # assign obtained value
                 self.data[mapping.name] = value
             except KeyError as e:
@@ -273,7 +274,7 @@ class DocumentObject(DataObject):
         if override_data is None:
             with open(filename) as testcase_fo:
                 data = yaml.safe_load(testcase_fo)
-        super().__init__(data, library=library, possible_parents=possible_parents)
+        super().__init__(data, library=library, possible_parents=possible_parents, document=self)
 
     def toYaml(self):
         return yaml.safe_dump(self.serialize(), sort_keys=False)

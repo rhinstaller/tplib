@@ -14,28 +14,28 @@ class Instruction(DataObject):
 
 
 class Phase(ListObject):
-    def __init__(self, name, data):
+    def __init__(self, name, data, document):
         self.name = name
-        super().__init__(data)
+        super().__init__(data, document=document)
 
 
     def feed(self, data):
         if not isinstance(data, list):
-            raise TypeError('Phase "%s" contains invalid data. List type was expected.' % self._name)
+            raise TypeError('%s: Phase "%s" contains invalid data. List type was expected.' % (self.document.filename, self._name))
         self.data = [ Instruction(item) for item in data ]
         data.clear()
 
 class SetupPhase(Phase):
-    def __init__(self, data):
-        super().__init__("setup", data)
+    def __init__(self, data, document):
+        super().__init__("setup", data, document)
 
 class StepsPhase(Phase):
-    def __init__(self, data):
-        super().__init__("setup", data)
+    def __init__(self, data, document):
+        super().__init__("setup", data, document)
 
 class TeardownPhase(Phase):
-    def __init__(self, data):
-        super().__init__("setup", data)
+    def __init__(self, data, document):
+        super().__init__("setup", data, document)
 
 class Instructions(DataObject):
     mapping = dict((
