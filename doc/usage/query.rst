@@ -4,6 +4,17 @@
 Query tools
 ===========
 
+.. _tool_validate:
+
+Validate library
+================
+
+.. argparse::
+   :filename: ../validate.py
+   :func: cli_parser
+   :prog: validate.py
+
+
 .. _tool_query:
 
 Filter and display

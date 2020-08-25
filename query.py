@@ -70,12 +70,12 @@ Examples:
     verbosity.add_argument(
         '-d', '--debug',
         action="store_true",
-        help="Turn on debugging.",
+        help="Turn on debugging in tclib.",
     )
     verbosity.add_argument(
         '-q', '--quiet',
         action="store_true",
-        help="Run in quiet mode: show errors and failures only.",
+        help="Run logging in quiet mode: show tclib errors and failures only.",
     )
     return parser
 

@@ -3,19 +3,17 @@
 import sys
 import argparse
 import logging
-from pprint import pprint
+from tclib.library import Library
 
-import tclib.library
+# ordered dict
 
 def cli_parser():
-    parser = argparse.ArgumentParser(description='My awesome app.')
-    parser.add_argument(
-        'old',
-        help="Directory containing old library (previous state)",
+    parser = argparse.ArgumentParser(
+        description='Validate testplan data by trying to create testcase library.',
     )
     parser.add_argument(
-        'new',
-        help="Directory containing new library (desired state)",
+        'directory',
+        help="Directory where requirements and testcases are located.",
     )
     verbosity = parser.add_mutually_exclusive_group()
     verbosity.add_argument(
@@ -43,10 +41,8 @@ def main(*in_args):
         level=loglevel,
         format=logformat,
     )
-    ...
-    o = tclib.library.Library(args.old)
-    n = tclib.library.Library(args.new)
-    pprint(tclib.library.diff(o, n))
+    Library(args.directory)
+    return 0
 
 if __name__ == "__main__":
     sys.exit(main(*sys.argv[1:]))
