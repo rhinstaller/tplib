@@ -1,6 +1,8 @@
 import functools
 from . import Mapping as m
 from .data_object import DataObject, DocumentObject, ListObject
+from ..expressions import eval_bool
+
 
 class QueryObject(DataObject):
     mapping = dict((
@@ -77,6 +79,16 @@ class TestPlan(DocumentObject):
         self.acceptanceTestCases |= self.library.getTestCasesByNames(self.acceptance_criteria.test_cases.direct_list, get_from=self.verificationTestCases)
         self.acceptanceTestCases |= self.library.getTestCasesByQuery(self.acceptance_criteria.test_cases.query, get_from=self.verificationTestCases, tp=self)
         self.acceptanceTestCases |= self.library.getTestCasesByNamedQuery(self.acceptance_criteria.test_cases.named_query, get_from=self.verificationTestCases, tp=self)
+
+    def eval_execute_on(self, *args, **kwargs):
+        if self.execute_on is None:
+            return True
+
+        for plan_filter in self.execute_on:
+            if 'filter' in plan_filter:
+                return eval_bool(plan_filter['filter'], tp=self, *args, **kwargs)
+
+        return False
 
     @property
     def id(self):
