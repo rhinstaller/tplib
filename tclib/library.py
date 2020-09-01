@@ -212,6 +212,26 @@ class Library():
 
         return { testcase for testcase in get_from if eval_bool(query, tc=testcase, **kwargs) }
 
+    def getTestPlansByQuery(self, query, get_from=None, **kwargs):
+        """ Finds testplans based on query, any extra arguments are handover to template.render(),
+        reference to object calling this function is expected, for example when called from event
+        add event=self
+
+        :param query: jinja2 expression
+        :type query: str
+        :param get_from: where to look for testplans, defaults to self.testplans.values()
+        :type get_from: list or set
+        :return: set of found testplans
+        :rtype: set
+        """
+        if query is None:
+            return set()
+
+        if get_from is None:
+            get_from = self.testplans.values()
+
+        return { testplan for testplan in get_from if eval_bool(query, tp=testplan, **kwargs) }
+
     def getRequirementsByNamedQuery(self, query_name, get_from=None, **kwargs):
         """ Finds requirements based on query, any extra arguments are handover to template.render(),
         reference to object calling this function is expected, for example when called from testplan
@@ -238,6 +258,22 @@ class Library():
         :param get_from: where to look for testcases, defaults to self.testcases.values()
         :type get_from: list or set
         :return: set of found testcases
+        :rtype: set
+        """
+        if query_name is None:
+            return set()
+        raise RuntimeError('named_query is not implemented')
+
+    def getTestPlansByNamedQuery(self, query_name, get_from=None, **kwargs):
+        """ Finds testplans based on query, any extra arguments are handover to template.render(),
+        reference to object calling this function is expected, for example when called from event
+        add event=self
+
+        :param query_name: Name of query
+        :type query_name: str
+        :param get_from: where to look for testplans, defaults to self.testplans.values()
+        :type get_from: list or set
+        :return: set of found testplans
         :rtype: set
         """
         if query_name is None:
