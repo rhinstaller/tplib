@@ -83,7 +83,7 @@ class TestPlan(DocumentObject):
 
     def stabilize(self):
         # Get verificationRequirements
-        self.verificationRequirements |= self.library.getRquirementsByNames(self.verified_by.requirements.direct_list)
+        self.verificationRequirements |= self.library.getRequirementsByNames(self.verified_by.requirements.direct_list)
         self.verificationRequirements |= self.library.getRequirementsByQuery(self.verified_by.requirements.query, tp=self)
         self.verificationRequirements |= self.library.getRequirementsByNamedQuery(self.verified_by.requirements.named_query, tp=self)
 
@@ -97,7 +97,7 @@ class TestPlan(DocumentObject):
             self.verificationTestCases |= requirement.verificationTestCases
 
         # Get acceptanceRequirements
-        self.acceptanceRequirements |= self.library.getRquirementsByNames(self.acceptance_criteria.requirements.direct_list)
+        self.acceptanceRequirements |= self.library.getRequirementsByNames(self.acceptance_criteria.requirements.direct_list)
         self.acceptanceRequirements |= self.library.getRequirementsByQuery(self.acceptance_criteria.requirements.query, tp=self)
         self.acceptanceRequirements |= self.library.getRequirementsByNamedQuery(self.acceptance_criteria.requirements.named_query, tp=self)
 

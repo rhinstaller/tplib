@@ -144,7 +144,7 @@ class Library():
             get_from = self.testcases.values()
         return self._names_to_objects(names, get_from)
 
-    def getRquirementsByNames(self, names, get_from=None):
+    def getRequirementsByNames(self, names, get_from=None):
         """ Finds requirements based on list of names
 
         :param names: List of requirement names
