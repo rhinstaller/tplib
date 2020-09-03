@@ -22,7 +22,7 @@ class Phase(ListObject):
     def feed(self, data):
         if not isinstance(data, list):
             raise TypeError('%s: Phase "%s" contains invalid data. List type was expected.' % (self.document.filename, self._name))
-        self.data = [ Instruction(item) for item in data ]
+        self.data = [ Instruction(item, library=self.library, document=self.document) for item in data ]
         data.clear()
 
 class SetupPhase(Phase):
