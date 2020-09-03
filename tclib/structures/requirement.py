@@ -22,10 +22,10 @@ class Requirement(DocumentObject):
         'acceptanceTestCases',
     ]
 
-    def __init__(self, data, library=None, basedir=None, possible_parents=None):
+    def __init__(self, filename, library=None, basedir=None, possible_parents=None):
         self.verificationTestCases = set()
         self.acceptanceTestCases = set()
-        super().__init__(data, library=library, basedir=basedir, possible_parents=possible_parents)
+        super().__init__(filename, library=library, basedir=basedir, possible_parents=possible_parents)
 
     def stabilize(self):
         # Get verificationTestCases
