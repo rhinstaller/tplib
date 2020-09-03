@@ -78,12 +78,30 @@ class DataObject(ABC):
                     value = data.pop(mapping.source)
                 elif mapping.required and inheritance:
                     # required with possible inheritance
-                    value = data.pop(mapping.source,
-                                     getattr(self.parent, mapping.name))
+                    try:
+                        value = data.pop(mapping.source)
+                    except KeyError:
+                        # directly store the inherited value as it was already
+                        # processed/checked and continue with next item in data
+                        self.data[mapping.name] = getattr(
+                            self.parent, mapping.name
+                        )
+                        continue
                 elif inheritance:
                     # optional with possible inheritance
-                    value = data.pop(mapping.source,
-                                     getattr(self.parent, mapping.name, default))
+                    try:
+                        value = data.pop(mapping.source)
+                    except KeyError:
+                        try:
+                            # directly store the inherited value as it was
+                            # already processed/checked and continue with next
+                            # item in data
+                            self.data[mapping.name] = getattr(
+                                self.parent, mapping.name
+                            )
+                            continue
+                        except AttributeError:
+                            value = default
                 else:
                     # optional without inheritance
                     value = data.pop(mapping.source, default)
