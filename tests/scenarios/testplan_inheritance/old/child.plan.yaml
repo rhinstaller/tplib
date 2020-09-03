@@ -12,8 +12,9 @@ parent_plan:
 reporting:
   - type: email
     condition:
-    template: |
-      email template
+    data:
+      template: |
+        email template
 configurations:
   - arch: x86_64
 document: |

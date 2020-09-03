@@ -20,8 +20,9 @@ verified_by:
 reporting:
   - type: email
     condition:
-    template: |
-      email template
+    data:
+      template: |
+        email template
 acceptance_criteria:
   test_cases:
     direct_list:

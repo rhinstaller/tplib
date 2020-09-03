@@ -17,6 +17,24 @@ class Selection(DataObject):
         m('requirements', required=False, func=QueryObject),
     ))
 
+class Reportings(ListObject):
+    @property
+    def name(self):
+        return 'Foo'
+
+    def feed(self, data):
+        if not isinstance(data, list):
+            raise TypeError('%s: Reporting contains invalid data: %r. List type was expected.' % (self.document.filename, data))
+        self.data = [ Reporting(item, library=self.library, document=self.document) for item in data ]
+        data.clear()
+
+class Reporting(DataObject):
+    mapping = dict((
+        m('type'),
+        m('condition', required=False),
+        m('data', required=False, allowed_types=dict),
+    ))
+
 class TestPlan(DocumentObject):
     parent_key_name = 'parent_plan'
     mapping = dict((
@@ -28,7 +46,7 @@ class TestPlan(DocumentObject):
         m('execute_on', inherited=True, required=False, allowed_types=list),
         m('parent_plan', required=False),
         m('verified_by', required=False, func=Selection),
-        m('reporting', allowed_types=list, inherited=True),
+        m('reporting', inherited=True, func=Reportings),
         m('acceptance_criteria', required=False, func=Selection),
         m('configurations', required=False, default=None, inherited=True, allowed_types=(list,type(None))),
         m('document', required=False)

@@ -52,9 +52,9 @@ Test plan
   * **acceptance_criteria** (`dict` - :py:class:`tclib.structures.testplan.Selection`, `optional`) -- Same as **verified_by**
   * **reporting** (`list`, `inherited`)
 
-    * **type** (`str`) --
-    * **condition** (`str`) --
-    * **template** (`str`) --
+    * **type** (`str`) -- Name of reporting should be used while executing the test plan.
+    * **condition** (`str`) -- Jinja2 expression used to determine when this reporting definition should be used. One may limit using the reporting only in cases of some events.
+    * **data** (`dict`) -- Data consumed by automation for purposes of reporting done by the used reporting type.
 
   * **configurations** (`list`, `inherited`, `optional`) --
   * **document** (`str`, `optional`) --
