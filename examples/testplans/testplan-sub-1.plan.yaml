@@ -6,9 +6,6 @@ tags:
   - foo_tag
   - bar_tag
 artifact_type: compose
-execute_on:
-  - type: snapshot
-    filter:
 parent_plan: testplan main 1
 verified_by:
   test_cases:

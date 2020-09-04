@@ -20,7 +20,7 @@ class Selection(DataObject):
 class Reportings(ListObject):
     @property
     def name(self):
-        return 'Foo'
+        return 'Reportings_ListObject'
 
     def feed(self, data):
         if not isinstance(data, list):
@@ -35,6 +35,22 @@ class Reporting(DataObject):
         m('data', required=False, allowed_types=dict),
     ))
 
+class ExecuteOnList(ListObject):
+    @property
+    def name(self):
+        return 'ExecuteOn_ListObject'
+
+    def feed(self, data):
+        if not isinstance(data, list):
+            raise TypeError('%s: execute_on contains invalid data: %r. List type was expected.' % (self.document.filename, data))
+        self.data = [ ExecuteOn(item, library=self.library, document=self.document) for item in data ]
+        data.clear()
+
+class ExecuteOn(DataObject):
+    mapping = dict((
+        m('filter', required=False, allowed_types=str),
+    ))
+
 class TestPlan(DocumentObject):
     parent_key_name = 'parent_plan'
     mapping = dict((
@@ -43,7 +59,7 @@ class TestPlan(DocumentObject):
         m('point_person', inherited=True),
         m('tags', required=False, default=(), func=set, inherited=True),
         m('artifact_type', inherited=True),
-        m('execute_on', inherited=True, required=False, allowed_types=list),
+        m('execute_on', inherited=True, required=False, func=ExecuteOnList),
         m('parent_plan', required=False),
         m('verified_by', required=False, func=Selection),
         m('reporting', inherited=True, func=Reportings),
@@ -104,7 +120,7 @@ class TestPlan(DocumentObject):
 
         for plan_filter in self.execute_on:
             if 'filter' in plan_filter:
-                return eval_bool(plan_filter['filter'], tp=self, *args, **kwargs)
+                return eval_bool(plan_filter.filter, tp=self, *args, **kwargs)
 
         return False
 

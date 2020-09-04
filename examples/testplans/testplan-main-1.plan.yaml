@@ -7,8 +7,7 @@ tags:
   - bar_tag
 artifact_type: compose
 execute_on:
-  - type: snapshot
-    filter:
+  - filter: "event.status == built"
 parent_plan:
 verified_by:
   test_cases:

@@ -6,8 +6,7 @@ tags:
   - foo_tag
 artifact_type: compose
 execute_on:
-  - type: snapshot
-    filter:
+  - filter: test
 parent_plan:
 reporting:
   - type: email
