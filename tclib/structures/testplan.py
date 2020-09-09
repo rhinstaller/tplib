@@ -32,7 +32,7 @@ class Reporting(DataObject):
     mapping = dict((
         m('type'),
         m('condition', required=False),
-        m('data', required=False, allowed_types=dict),
+        m('data', required=False, allowed_types=object),
     ))
 
 class ExecuteOnList(ListObject):
