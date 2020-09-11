@@ -34,3 +34,11 @@ Show diff
    :filename: ../diff.py
    :func: cli_parser
    :prog: diff.py
+
+Generate documents
+==================
+
+.. argparse::
+   :filename: ../generate_documents.py
+   :func: cli_parser
+   :prog: generate_documents.py

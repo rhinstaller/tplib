@@ -1,0 +1,97 @@
+<html>
+  <head><title>index</title></head>
+  <body>
+    <h1>Testplans</h1>
+    {% for tp_id, tp in library.testplans.items() %}
+    <div id="testplan:{{ tp_id|replace(' ', '_') }}">
+      <h2>{{ tp_id }}</h2>
+      <p>{{ tp.description }}</p>
+      <h3>Document</h3>
+      <p>{{ tp.document }}</p>
+      <h3>Verified by testcases</h3>
+      <ul>
+        {% for tc in tp.verificationTestCases %}
+        <li><a href="#testcase:{{ tc.id|replace(' ', '_') }}">{{ tc.id }}</a></li>
+        {% endfor %}
+      </ul>
+      <h3>Configurations</h3>
+      <ul>
+        {% for configuration in tp.configurations %}
+        <li>
+          <table border="1">
+            <tr><th>key</th><th>value</th></tr>
+            {% for key, value in configuration.items() %}
+            <tr><td>{{ key }}</td><td>{{ value }}</td></tr>
+            {% endfor %}
+          </table>
+        </li>
+        {% endfor %}
+      </ul>
+      <h3>Reporting</h3>
+      <ul>
+        {% for reporting in tp.reporting %}
+        <li>{{ reporting.type }}</li>
+        {% endfor %}
+      </ul>
+      {# <pre><code>{{ tp.dump()|escape }}</code></pre> #}
+    </div>
+    <hr/>
+    {% endfor %}
+
+    <h1>Requirements</h1>
+    {% for req_id, req in library.requirements.items() %}
+    <div id="requirement:{{ req_id|replace(' ', '_') }}">
+      <h2>{{ req_id }}</h2>
+      <p>{{ req.description }}</p>
+      <h3>Verified by testcases</h3>
+      <ul>
+        {% for tc in req.verificationTestCases %}
+        <li><a href="#testcase:{{ tc.id|replace(' ', '_') }}">{{ tc.id }}</a></li>
+        {% endfor %}
+      </ul>
+      {# <pre><code>{{ req.dump()|escape }}</code></pre> #}
+    </div>
+    <hr/>
+    {% endfor %}
+
+    <h1>Testcases</h1>
+    {% for tc_id, tc in library.testcases.items() %}
+    <div id="testcase:{{ tc_id|replace(' ', '_') }}">
+      <h2>{{ tc_id }}</h2>
+      <p>{{ tc.description }}</p>
+      <h3>Setup</h3>
+      <table border="1">
+        <tr><th>Step</th><th>Result</th></tr>
+        {% for instruction in tc.instructions.setup %}
+        <tr><td>{{ instruction.step }}</td><td>{{ instruction.result }}</td></tr>
+        {% endfor %}
+        <tr>
+      </table>
+      <h3>Steps</h3>
+      <table border="1">
+        <tr><th>Step</th><th>Result</th></tr>
+        {% for instruction in tc.instructions.steps %}
+        <tr><td>{{ instruction.step }}</td><td>{{ instruction.result }}</td></tr>
+        {% endfor %}
+        <tr>
+      </table>
+      <h3>Teardown</h3>
+      <table border="1">
+        <tr><th>Step</th><th>Result</th></tr>
+        {% for instruction in tc.instructions.teardown %}
+        <tr><td>{{ instruction.step }}</td><td>{{ instruction.result }}</td></tr>
+        {% endfor %}
+        <tr>
+      </table>
+      <h3>Verifies requirements</h3>
+      <ul>
+        {% for req in tc.verifiesRequirement %}
+        <li><a href="#requirement:{{ req.id|replace(' ', '_') }}">{{ req.id }}</a></li>
+        {% endfor %}
+      </ul>
+      {# <pre><code>{{ tc.dump()|escape }}</code></pre> #}
+    </div>
+    <hr/>
+    {% endfor %}
+  </body>
+</html>
