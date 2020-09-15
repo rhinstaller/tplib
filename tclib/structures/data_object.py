@@ -60,7 +60,7 @@ class DataObject(ABC):
         if possible_parents is None:
             possible_parents = {}
         if self.parent_key_name is not None:
-            parent_name = data[self.parent_key_name]
+            parent_name = data.get(self.parent_key_name)
             if parent_name is not None:
                 try:
                     self.parent = possible_parents[parent_name]
