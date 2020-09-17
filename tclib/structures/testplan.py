@@ -115,7 +115,7 @@ class TestPlan(DocumentObject):
         self.acceptanceTestCases |= self.library.getTestCasesByNamedQuery(self.acceptance_criteria.test_cases.named_query, get_from=self.verificationTestCases, tp=self)
 
     def eval_execute_on(self, *args, **kwargs):
-        if self.execute_on is None:
+        if not self.execute_on:
             return True
 
         for plan_filter in self.execute_on:

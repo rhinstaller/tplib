@@ -281,6 +281,8 @@ class ListObject(DataObject):
     def serialize(self):
         return [ value.serialize() if isinstance(value, DataObject) else value for value in self.data ]
 
+    def __bool__(self):
+        return bool(self.data)
 
 class DocumentObject(DataObject):
     def __init__(self, filename, override_data=None, library=None, basedir=None, possible_parents=None):
