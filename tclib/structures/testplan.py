@@ -120,7 +120,8 @@ class TestPlan(DocumentObject):
 
         for plan_filter in self.execute_on:
             if 'filter' in plan_filter:
-                return eval_bool(plan_filter.filter, tp=self, *args, **kwargs)
+                if eval_bool(plan_filter.filter, tp=self, *args, **kwargs):
+                    return True
 
         return False
 
