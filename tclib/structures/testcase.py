@@ -44,13 +44,18 @@ class Instructions(DataObject):
         m('teardown', required=False, default=[], func=TeardownPhase),
     ))
 
+class Execution(DataObject):
+    mapping = dict((
+        m('type'),
+        m('automation_data', required=False, allowed_types=(object,)),
+    ))
 
 class TestCase(DocumentObject):
     mapping = dict((
         m('name'),
         m('description'),
         m('priority', allowed_types=int),
-        m('execution', allowed_types=dict),
+        m('execution', func=Execution),
         m('filter', required=False, default=(), func=list),
         m('instructions', func=Instructions),
         m('configurations', required=False, default=None, allowed_types=(list,type(None))),
