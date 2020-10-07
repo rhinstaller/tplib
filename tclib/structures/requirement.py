@@ -1,6 +1,7 @@
 import functools
 from . import Mapping as m
 from .data_object import DataObject, DocumentObject, ListObject
+from ..exceptions import MissingLinkedItem
 
 class QueryObject(DataObject):
     mapping = dict((
@@ -29,7 +30,10 @@ class Requirement(DocumentObject):
 
     def stabilize(self):
         # Get verificationTestCases
-        self.verificationTestCases |= self.library.getTestCasesByNames(self.verified_by.direct_list)
+        try:
+            self.verificationTestCases |= self.library.getTestCasesByNames(self.verified_by.direct_list)
+        except KeyError as key_value:
+            raise MissingLinkedItem(key_value, self.name)
         self.verificationTestCases |= self.library.getTestCasesByQuery(self.verified_by.query, req=self)
         self.verificationTestCases |= self.library.getTestCasesByNamedQuery(self.verified_by.named_query, req=self)
 

@@ -43,3 +43,14 @@ class GarbageData(Exception):
     def __init__(self, instance, data):
         message = "%s in %s document contains additional unexpected data: %s"
         super().__init__(message % (type(instance), instance.document.filename, data))
+
+class MissingLinkedItem(Exception):
+    def __init__(self, wanted, seeker):
+        self.wanted = wanted
+        self.seeker = seeker
+
+    def __str__(self):
+        return "'%s' was unable to find it's linked item: %s" % (
+            self.seeker,
+            self.wanted,
+        )

@@ -2,6 +2,7 @@ import functools
 from . import Mapping as m
 from .data_object import DataObject, DocumentObject, ListObject
 from ..expressions import eval_bool
+from ..exceptions import MissingLinkedItem
 
 
 class QueryObject(DataObject):
@@ -83,7 +84,10 @@ class TestPlan(DocumentObject):
 
     def stabilize(self):
         # Get verificationRequirements
-        self.verificationRequirements |= self.library.getRequirementsByNames(self.verified_by.requirements.direct_list)
+        try:
+            self.verificationRequirements |= self.library.getRequirementsByNames(self.verified_by.requirements.direct_list)
+        except KeyError as key_value:
+            raise MissingLinkedItem(key_value, self.name)
         self.verificationRequirements |= self.library.getRequirementsByQuery(self.verified_by.requirements.query, tp=self)
         self.verificationRequirements |= self.library.getRequirementsByNamedQuery(self.verified_by.requirements.named_query, tp=self)
 
