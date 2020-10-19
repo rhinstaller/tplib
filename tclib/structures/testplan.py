@@ -63,7 +63,7 @@ class TestPlan(DocumentObject):
         m('execute_on', inherited=True, required=False, func=ExecuteOnList),
         m('parent_plan', required=False),
         m('verified_by', required=False, func=Selection),
-        m('reporting', inherited=True, func=Reportings),
+        m('reporting', inherited=True, func=Reportings, required=False),
         m('acceptance_criteria', required=False, func=Selection),
         m('configurations', required=False, default=None, inherited=True, allowed_types=(list,type(None))),
         m('document', required=False)
