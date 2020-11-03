@@ -29,10 +29,24 @@ class Reportings(ListObject):
         self.data = [ Reporting(item, library=self.library, document=self.document) for item in data ]
         data.clear()
 
+class GroupBy(ListObject):
+    @property
+    def name(self):
+        return 'Reporting_GroupBy'
+
+    def feed(self, data):
+        if not isinstance(data, list):
+            raise TypeError('%s: group_by contains invalid data: %r. List type was expected.' % (self.document.filename, data))
+        if not all([isinstance(item, str) for item in data]):
+            raise TypeError('%s: group_by contains non-string list item.')
+        self.data = data.copy()
+        data.clear()
+
 class Reporting(DataObject):
     mapping = dict((
         m('type'),
         m('condition', required=False),
+        m('group_by', required=False, func=GroupBy),
         m('data', required=False, allowed_types=object),
     ))
 

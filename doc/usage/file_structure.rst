@@ -54,6 +54,7 @@ Test plan
 
     * **type** (`str`) -- Name of reporting should be used while executing the test plan.
     * **condition** (`str`) -- Jinja2 expression used to determine when this reporting definition should be used. One may limit using the reporting only in cases of some events.
+    * **group_by** (`list`) -- List of testcases configuration keys based on which the reporting should be grouped.
     * **data** -- Data consumed by automation for purposes of reporting done by the used reporting type. There's no type restriction for this structure.
 
   * **configurations** (`list`, `inherited`, `optional`) --

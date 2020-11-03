@@ -28,8 +28,8 @@ acceptance_criteria:
       - testing case (automated)
     query: tc.name == 'testing case (disabled)'
 configurations:
-  - arch: x86_64
-  - arch: ppc64le
+  - architecture: x86_64
+  - architecrure: ppc64le
 document: |
   reference to a test plan document template
   the content used to generate a test plan document
