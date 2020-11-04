@@ -41,7 +41,7 @@ class DataObject(ABC):
     default_data = {}
 
     def __init__(self, data, library=None, possible_parents=None, document=None):
-        self.data = {}
+        self._data = {}
         self.parent = None
         self.library = library
         self.document = document
@@ -83,7 +83,7 @@ class DataObject(ABC):
                     except KeyError:
                         # directly store the inherited value as it was already
                         # processed/checked and continue with next item in data
-                        self.data[mapping.name] = getattr(
+                        self._data[mapping.name] = getattr(
                             self.parent, mapping.name
                         )
                         continue
@@ -96,7 +96,7 @@ class DataObject(ABC):
                             # directly store the inherited value as it was
                             # already processed/checked and continue with next
                             # item in data
-                            self.data[mapping.name] = getattr(
+                            self._data[mapping.name] = getattr(
                                 self.parent, mapping.name
                             )
                             continue
@@ -116,7 +116,7 @@ class DataObject(ABC):
                     raise TypeError("%s: Wrong type of: %s. Expected one of: %s, was: %s" % (self.document.filename, mapping.name,
                                                                                              mapping.allowed_types, type(value)))
                 # assign obtained value
-                self.data[mapping.name] = value
+                self._data[mapping.name] = value
             except KeyError as e:
                 # add support for validation here!
                 validate = False
@@ -130,7 +130,7 @@ class DataObject(ABC):
         if self.allow_nonstandard_values:
             for key in list(data.keys()):
                 if key.startswith('x-'):
-                    self.data[key] = data.pop(key)
+                    self._data[key] = data.pop(key)
 
         return data
 
@@ -150,20 +150,20 @@ class DataObject(ABC):
 
     @property
     def _name(self):
-        return self.data.get('name')
+        return self._data.get('name')
 
 
     def __getattr__(self, name):
         try:
             return super().__getattr__(self, name)
         except AttributeError:
-            return self.data[name]
+            return self._data[name]
 
 
     def __eq__(self, other):
         if type(self) != type(other):
             return NotImplemented
-        if self.data != other.data:
+        if self._data != other._data:
             return False
         # !!! NOT A GOOD IDEA - THERE'S INFINITE RECURSION !!!
         #for prop in self.runtime_properties:
@@ -178,7 +178,7 @@ class DataObject(ABC):
 
 
     def __getitem__(self, name):
-        return self.data[name]
+        return self._data[name]
 
 
     def __repr__(self):
@@ -190,7 +190,7 @@ class DataObject(ABC):
 
 
     def __iter__(self):
-        return self.data.__iter__()
+        return self._data.__iter__()
 
 
     def dumpname(self):
@@ -210,7 +210,7 @@ class DataObject(ABC):
         return ",\n".join([
             (indent*" " + "%s: %s") % (key, dump_or_repr(value, indent))
             for key, value
-            in self.data.items()
+            in self._data.items()
         ])
 
     def dumpproperties(self, indent):
@@ -243,7 +243,7 @@ class DataObject(ABC):
         }
 
     def _should_serialize_self(self):
-        return bool(self.data)
+        return bool(self._data)
 
     def _should_serialize_item(self, item):
         if item.startswith('x-'):
@@ -251,17 +251,17 @@ class DataObject(ABC):
         mapping = self.mapping[item]
         if mapping.required:
             return True
-        if isinstance(self.data[item], DataObject):
-            return self.data[item]._should_serialize_self()
+        if isinstance(self._data[item], DataObject):
+            return self._data[item]._should_serialize_self()
         default = mapping.default
         if mapping.func is not None:
             default = mapping.func(default)
-        if default == self.data[item]:
+        if default == self._data[item]:
             return False
         return True
 
     def serialize(self):
-        return { key : serialize_value(value) for key, value in self.data.items() if self._should_serialize_item(key) }
+        return { key : serialize_value(value) for key, value in self._data.items() if self._should_serialize_item(key) }
 
 
 class ListObject(DataObject):
@@ -275,14 +275,14 @@ class ListObject(DataObject):
         return ",\n".join([
             (indent*" " + "%s") % dump_or_repr(value, indent)
             for value
-            in self.data
+            in self._data
         ])
 
     def serialize(self):
-        return [ value.serialize() if isinstance(value, DataObject) else value for value in self.data ]
+        return [ value.serialize() if isinstance(value, DataObject) else value for value in self._data ]
 
     def __bool__(self):
-        return bool(self.data)
+        return bool(self._data)
 
 class DocumentObject(DataObject):
     def __init__(self, filename, override_data=None, library=None, basedir=None, possible_parents=None):

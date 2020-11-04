@@ -56,7 +56,7 @@ class Requirement(DocumentObject):
     def __eq__(self, other):
         if type(self) != type(other):
             return NotImplemented
-        if self.data != other.data:
+        if self._data != other._data:
             return False
 
         checked_references = [

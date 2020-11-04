@@ -22,7 +22,7 @@ class Phase(ListObject):
     def feed(self, data):
         if not isinstance(data, list):
             raise TypeError('%s: Phase "%s" contains invalid data. List type was expected.' % (self.document.filename, self._name))
-        self.data = [ Instruction(item, library=self.library, document=self.document) for item in data ]
+        self._data = [ Instruction(item, library=self.library, document=self.document) for item in data ]
         data.clear()
 
 class SetupPhase(Phase):
@@ -80,7 +80,7 @@ class TestCase(DocumentObject):
     def __eq__(self, other):
         if type(self) != type(other):
             return NotImplemented
-        if self.data != other.data:
+        if self._data != other._data:
             return False
         if { req.id for req in self.verifiesRequirement } != { req.id for req in other.verifiesRequirement }:
             return False

@@ -26,7 +26,7 @@ class Reportings(ListObject):
     def feed(self, data):
         if not isinstance(data, list):
             raise TypeError('%s: Reporting contains invalid data: %r. List type was expected.' % (self.document.filename, data))
-        self.data = [ Reporting(item, library=self.library, document=self.document) for item in data ]
+        self._data = [ Reporting(item, library=self.library, document=self.document) for item in data ]
         data.clear()
 
 class GroupBy(ListObject):
@@ -58,7 +58,7 @@ class ExecuteOnList(ListObject):
     def feed(self, data):
         if not isinstance(data, list):
             raise TypeError('%s: execute_on contains invalid data: %r. List type was expected.' % (self.document.filename, data))
-        self.data = [ ExecuteOn(item, library=self.library, document=self.document) for item in data ]
+        self._data = [ ExecuteOn(item, library=self.library, document=self.document) for item in data ]
         data.clear()
 
 class ExecuteOn(DataObject):
@@ -153,7 +153,7 @@ class TestPlan(DocumentObject):
     def __eq__(self, other):
         if type(self) != type(other):
             return NotImplemented
-        if self.data != other.data:
+        if self._data != other._data:
             return False
 
         checked_references = [
