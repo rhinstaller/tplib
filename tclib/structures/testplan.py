@@ -39,7 +39,7 @@ class GroupBy(ListObject):
             raise TypeError('%s: group_by contains invalid data: %r. List type was expected.' % (self.document.filename, data))
         if not all([isinstance(item, str) for item in data]):
             raise TypeError('%s: group_by contains non-string list item.')
-        self.data = data.copy()
+        self._data = data.copy()
         data.clear()
 
 class Reporting(DataObject):
