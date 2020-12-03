@@ -10,8 +10,8 @@ priority: 7
 execution:
   type: manual
 configurations:
-  - arch: x86_64
-  - arch: ppc64le
+  - architecture: x86_64
+  - architecture: ppc64le
 filter:
   - variant: BaseOS
 instructions:

@@ -15,6 +15,6 @@ reporting:
       template: |
         email template
 configurations:
-  - arch: x86_64
+  - architecture: x86_64
 document: |
   Test

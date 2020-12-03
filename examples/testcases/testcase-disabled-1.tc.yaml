@@ -8,7 +8,7 @@ priority: 3
 execution:
   type: manual
 configurations:
-  - arch: x86_64
+  - architecture: x86_64
 filter:
   - variant: BaseOS
 instructions:

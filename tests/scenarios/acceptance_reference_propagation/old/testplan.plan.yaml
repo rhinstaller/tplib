@@ -23,6 +23,6 @@ acceptance_criteria:
     direct_list:
       - Priority requirement
 configurations:
-  - arch: x86_64
+  - architecture: x86_64
 document: |
   Test
