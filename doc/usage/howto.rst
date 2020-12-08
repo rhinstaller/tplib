@@ -38,6 +38,40 @@ I want to delete a testcase
 .. note:: Deleted testcases are still available in Polarion and are in inactive
           state.
 
+I want to disable automated execution on all architectures/variants due to issue in automation but I still want to have the testscase tested manually.
+------------------------------------------------------------------------------------------------------------------------------------------------------
+Change the execution type to "manual" and leave the automation_data. The "manual" workflow doesn’t use automation_data. It may be also good to leave the original execution type commented out so that it's clear which execution type should be used once the automation is fixed.
+
+Test case cannot be executed due to some testblocker (not tested by the testcase) and there’s no workaround for the testblocker.
+--------------------------------------------------------------------------------------------------------------------------------
+Add hints about testblockers to the testcase to dedicated field (not implemented yet).
+
+Test case cannot be executed due to momentarily unavailable HW/infrastructure.
+------------------------------------------------------------------------------
+Add hints about issues to the testcase to dedicated field (not implemented yet).
+
+Test case cannot be executed due to long term hardware inavailability.
+----------------------------------------------------------------------
+Example: s390x with specific HDD was not available and is not available for few years already
+
+Remove the testcase from the testplan (either by commenting it out in the list of testcases or via e.g. “disabled” tag and query taking into account such tag).
+
+Test case cannot be temporarily executed on some specific HW subset but can be still tested on other HW variants.
+-----------------------------------------------------------------------------------------------------------------
+Add issue/testblocker hint to dedicated fielt (not implemented yet).
+
+Test case cannot be permanently executed on some specific HW subset but can be still tested on other HW variants.
+-----------------------------------------------------------------------------------------------------------------
+Remove the configuration or create second testcase.
+
+Or
+
+Add issue/testblocker hint to dedicated fielt (not implemented yet).
+
+There are not enough resources for the test plans execution and some test cases have lower priority.
+----------------------------------------------------------------------------------------------------
+Have such testcases executed as part of a different testplan(s) or no testplan at all e.g. by lower priority while having testplans respecting priorities (or by commenting it out of the testplan).
+
 Requirements
 ============
 
