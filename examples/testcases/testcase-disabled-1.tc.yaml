@@ -3,14 +3,16 @@ x-polarion-status: inactive
 description: |
   This test case serves only for testing purposes for git repository -> tcms
   synchronization.
+
+  Note that such testcases is disabled only in Polarion but is still used
+  by all the tooling which doesn't reflect the polarion extensions.
 author: pholica@redhat.com
 priority: 3
 execution:
   type: manual
 configurations:
   - architecture: x86_64
-filter:
-  - variant: BaseOS
+    variant: BaseOS
 instructions:
   setup:
     - Don't find this test case

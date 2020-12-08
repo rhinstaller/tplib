@@ -14,9 +14,9 @@ execution:
     exit 0
 configurations:
   - architecture: x86_64
+    variant: BaseOS
   - architecture: ppc64le
-filter:
-  - variant: BaseOS
+    variant: BaseOS
 instructions:
   setup:
     - Create executable file from this test case using automation_data

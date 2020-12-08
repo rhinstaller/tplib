@@ -11,9 +11,9 @@ execution:
   type: manual
 configurations:
   - architecture: x86_64
+    variant: BaseOS
   - architecture: ppc64le
-filter:
-  - variant: BaseOS
+    variant: BaseOS
 instructions:
   setup:
     - Find this test case
