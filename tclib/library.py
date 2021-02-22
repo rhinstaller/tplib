@@ -91,12 +91,14 @@ class Library():
         """
         structures = dict()
         docfiles = list(_iter_documents(directory, pattern))
+        errors = dict()
         while docfiles:
             docfile_loaded = False
             for docfile in copy(docfiles):
                 try:
                     structure = cls(docfile, library=self, basedir=directory, possible_parents=structures)
-                except UnknownParentError:
+                except UnknownParentError as e:
+                    errors[docfile] = e
                     continue
                 try:
                     # try to find if structure of the same id
@@ -107,10 +109,12 @@ class Library():
                 structures[structure.id] = structure
                 docfiles.remove(docfile)
                 docfile_loaded = True
+                # clean any previously hit errors
+                errors.pop(docfile, None)
             if not docfile_loaded:
                 break
         if docfiles:
-            raise DocfilesError(docfiles)
+            raise DocfilesError(docfiles, errors)
         return structures
 
     def _calculate_and_stabilize_structures(self, structures):

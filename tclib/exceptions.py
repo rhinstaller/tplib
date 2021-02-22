@@ -30,14 +30,16 @@ class UnknownParentError(Exception):
         )
 
 class DocfilesError(Exception):
-    def __init__(self, docfiles):
+    def __init__(self, docfiles, errors=None):
         super().__init__()
         self.docfiles = docfiles
+        self.errors = errors or []
 
     def __str__(self):
-        return "Couldn't process following docfiles: %s" % ', '.join([
-            "'%s'" % docfile for docfile in self.docfiles
-        ])
+        return "Couldn't process following docfiles: %s.\nErrors were:\n%s" % (
+            ', '.join(["'%s'" % docfile for docfile in self.docfiles]),
+            '\n'.join([ str(e) for e in self.errors.values() ])
+        )
 
 class GarbageData(Exception):
     def __init__(self, instance, data):

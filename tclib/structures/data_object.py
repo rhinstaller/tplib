@@ -65,7 +65,7 @@ class DataObject(ABC):
                 try:
                     self.parent = possible_parents[parent_name]
                 except KeyError:
-                    raise UnknownParentError('', self.parent_key_name)
+                    raise UnknownParentError(self.document.filename, self.parent_key_name)
 
     def _autofeed(self, data):
         for mapping in self.mapping.values():
