@@ -74,6 +74,7 @@ class TestPlan(DocumentObject):
         m('point_person', inherited=True),
         m('tags', required=False, default=(), func=set, inherited=True),
         m('artifact_type', inherited=True),
+        m('components', inherited=True, required=False, default=(), func=set),
         m('execute_on', inherited=True, required=False, func=ExecuteOnList),
         m('parent_plan', required=False),
         m('verified_by', required=False, func=Selection),

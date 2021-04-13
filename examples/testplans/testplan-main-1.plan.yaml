@@ -6,6 +6,9 @@ tags:
   - foo_tag
   - bar_tag
 artifact_type: compose
+components:
+  - anaconda
+  - python-blivet
 execute_on:
   - filter: "event.status == built"
 parent_plan:

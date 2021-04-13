@@ -29,6 +29,7 @@ Test plan
   * **point_person** (`str`, `inherited`) --
   * **tags** (`set`, `inherited`, `optional`) --
   * **artifact_type** (`str`, `inherited`) --
+  * **components** (`set`, `inherited`, `optional`) -- Set of component names related to the testplan
   * **execute_on** (`list`, `inherited`) --
 
     * **type** (`str`) --
