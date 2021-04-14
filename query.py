@@ -27,6 +27,10 @@ Examples:
  * Print names and filenames of all testcases
 
   * ``./query.py -t tests/scenarios/removed_testcase/old/ True 'tc.name, tc.filename'``
+
+ * Get names of installer testcases which verify requirement X and are not disabled, manual and have specified priority
+
+  * ``./query.py -tb ~/git/testplans/ '"installer" in tc.tags and "disabled" not in tc.tags and tc.priority < 9 and tc.execution.type != "manual" and "requirement X name" in tc.verifiesRequirement|map(attribute="name")' 'tc.name'``
 """,
         formatter_class=argparse.RawTextHelpFormatter,
     )
