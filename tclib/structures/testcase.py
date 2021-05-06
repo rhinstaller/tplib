@@ -31,11 +31,11 @@ class SetupPhase(Phase):
 
 class StepsPhase(Phase):
     def __init__(self, data, document):
-        super().__init__("setup", data, document)
+        super().__init__("steps", data, document)
 
 class TeardownPhase(Phase):
     def __init__(self, data, document):
-        super().__init__("setup", data, document)
+        super().__init__("teardown", data, document)
 
 class Instructions(DataObject):
     mapping = dict((
