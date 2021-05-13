@@ -55,6 +55,7 @@ class TestCase(DocumentObject):
         m('name'),
         m('description'),
         m('priority', allowed_types=int),
+        m('components', required=False, default=(), func=list),
         m('execution', func=Execution),
         m('filter', required=False, default=(), func=list),
         m('instructions', func=Instructions),
