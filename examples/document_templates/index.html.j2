@@ -2,7 +2,7 @@
   <head><title>index</title></head>
   <body>
     <h1>Testplans</h1>
-    {% for tp_id, tp in library.testplans.items() %}
+    {% for tp_id, tp in library.testplans.items()|sort %}
     <div id="testplan:{{ tp_id|replace(' ', '_') }}">
       <h2>{{ tp_id }}</h2>
       <p>{{ tp.description }}</p>
@@ -10,7 +10,7 @@
       <p>{{ tp.document }}</p>
       <h3>Verified by testcases</h3>
       <ul>
-        {% for tc in tp.verificationTestCases %}
+        {% for tc in tp.verificationTestCases|sort(attribute='id') %}
         <li><a href="#testcase:{{ tc.id|replace(' ', '_') }}">{{ tc.id }}</a></li>
         {% endfor %}
       </ul>
@@ -39,13 +39,13 @@
     {% endfor %}
 
     <h1>Requirements</h1>
-    {% for req_id, req in library.requirements.items() %}
+    {% for req_id, req in library.requirements.items()|sort %}
     <div id="requirement:{{ req_id|replace(' ', '_') }}">
       <h2>{{ req_id }}</h2>
       <p>{{ req.description }}</p>
       <h3>Verified by testcases</h3>
       <ul>
-        {% for tc in req.verificationTestCases %}
+        {% for tc in req.verificationTestCases|sort(attribute='id') %}
         <li><a href="#testcase:{{ tc.id|replace(' ', '_') }}">{{ tc.id }}</a></li>
         {% endfor %}
       </ul>
@@ -55,7 +55,7 @@
     {% endfor %}
 
     <h1>Testcases</h1>
-    {% for tc_id, tc in library.testcases.items() %}
+    {% for tc_id, tc in library.testcases.items()|sort %}
     <div id="testcase:{{ tc_id|replace(' ', '_') }}">
       <h2>{{ tc_id }}</h2>
       <p>{{ tc.description }}</p>
