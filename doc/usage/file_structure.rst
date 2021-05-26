@@ -114,6 +114,8 @@ Test case
  * **description** (`str`) -- TODO
  * **priority** (`int`) -- This can be theoretically any number. Convention
    is to use values in range <1,10> where higher number means higher priority.
+ * **components** (`list`, `optional`) -- List of components covered by the
+   test case.
  * **execution** (`dict`) --
 
    * **type** (`str`) -- This field is used by automation of testcase
