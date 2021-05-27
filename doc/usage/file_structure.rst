@@ -24,18 +24,41 @@ Test plan
 :library attribute: ``testplans``
 :yaml structure:
 
-  * **name** (`str`, `unique`) --
-  * **description** (`str`, `optional`) --
-  * **point_person** (`str`, `inherited`) --
-  * **tags** (`set`, `inherited`, `optional`) --
-  * **artifact_type** (`str`, `inherited`) --
+  * **name** (`str`, `unique`) -- Test plan name. Used as identifier that can
+    be used in **parent_plan** field of other test plans.
+  * **description** (`str`, `optional`) -- Description of the testplan
+    providing information about the purpose of the test plan, possibly
+    specifying who the stakeholders are, turnaround times and other possibly
+    useful information.
+  * **point_person** (`str`, `inherited`) -- Identifier of person responsible
+    for maintenance of this test plan.
+  * **tags** (`set`, `inherited`, `optional`) -- Set of strings that can be used
+    for categorization purposes.
+  * **artifact_type** (`str`, `inherited`) -- Artifact which is handled by the
+    test plan. This can be any string. The idea is to use dots as separators
+    allowing fine grained specification for which artifacts and under which
+    circumstances should this test plan be started. For example, there could
+    be an artifact called `package` which can be e.g. `built`, `deleted` or
+    `accepted` and the package itself could be e.g. `production` or `scratch`.
+    If one would like to have the test plan executed for anything that
+    happens with the package, then artifact_type would be just plain
+    `package`. If one would like to execute the test plan only for scratch
+    packages at the moment they were built, then artifact_type would be
+    `package.built.scratch`. Please consult with the execution tooling
+    (pipeline) that uses tclib for storing test plans data.
   * **components** (`set`, `inherited`, `optional`) -- Set of component names related to the testplan
-  * **execute_on** (`list`, `inherited`) --
+  * **execute_on** (`list`, `inherited`) -- Define additional conditions for
+    the test plan execution.
 
     * **type** (`str`) --
-    * **filter** (`str`) --
+    * **filter** (`str`) -- Jinja2 expression, for more information consult
+      with the execution tooling (pipeline) that uses tclib for storing test
+      plans data.
 
-  * **parent_plan** (`str`, `optional`) --
+  * **parent_plan** (`str`, `optional`) -- **name** of other plan which should
+    be used as parent for this plan allowing inheritance of certain fields.
+    Circular inheritance (A -> B -> A -> ...) is not allowed and will result
+    in error as well as referencing non-existing test plan.
   * **verified_by** (`dict` - :py:class:`tclib.structures.testplan.Selection`, `optional`)
 
     * **test_cases** (`dict` - :py:class:`tclib.structures.testplan.QueryObject`, `optional`)
