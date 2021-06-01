@@ -38,7 +38,7 @@ def diff(old, new):
             "requirements" : new_requirements.difference(old_requirements),
             "testcases" : new_cases.difference(old_cases),
         },
-        "changed" : {
+        "modified" : {
             "testplans" : set(),
             "requirements" : set(),
             "testcases" : set(),
@@ -52,15 +52,15 @@ def diff(old, new):
     for testplan_id in copy(retval["unchanged"]["testplans"]):
         if old.testplans[testplan_id] != new.testplans[testplan_id]:
             retval["unchanged"]["testplans"].remove(testplan_id)
-            retval["changed"]["testplans"].add(testplan_id)
+            retval["modified"]["testplans"].add(testplan_id)
     for requirement_id in copy(retval["unchanged"]["requirements"]):
         if old.requirements[requirement_id] != new.requirements[requirement_id]:
             retval["unchanged"]["requirements"].remove(requirement_id)
-            retval["changed"]["requirements"].add(requirement_id)
+            retval["modified"]["requirements"].add(requirement_id)
     for case_id in copy(retval["unchanged"]["testcases"]):
         if old.testcases[case_id] != new.testcases[case_id]:
             retval["unchanged"]["testcases"].remove(case_id)
-            retval["changed"]["testcases"].add(case_id)
+            retval["modified"]["testcases"].add(case_id)
     return retval
 
 class Library():

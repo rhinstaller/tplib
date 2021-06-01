@@ -1,10 +1,16 @@
-{'added': {'requirements': set(), 'testcases': set(), 'testplans': set()},
- 'changed': {'requirements': {'Priority requirement'},
-             'testcases': set(),
-             'testplans': set()},
- 'removed': {'requirements': set(),
-             'testcases': {'High priority case'},
-             'testplans': set()},
- 'unchanged': {'requirements': {'Direct requirement'},
-               'testcases': {'Medium priority case'},
-               'testplans': set()}}
+ADDED testplans:
+ADDED requirements:
+ADDED testcases:
+MODIFIED testplans:
+MODIFIED requirements:
+ Priority requirement
+MODIFIED testcases:
+UNCHANGED testplans:
+UNCHANGED requirements:
+ Direct requirement
+UNCHANGED testcases:
+ Medium priority case
+REMOVED testplans:
+REMOVED requirements:
+REMOVED testcases:
+ High priority case

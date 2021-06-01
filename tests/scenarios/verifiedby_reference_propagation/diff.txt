@@ -1,6 +1,15 @@
-{'added': {'requirements': set(), 'testcases': set(), 'testplans': set()},
- 'changed': {'requirements': {'Priority requirement'},
-             'testcases': {'Medium priority case'},
-             'testplans': {'testplan 1'}},
- 'removed': {'requirements': set(), 'testcases': set(), 'testplans': set()},
- 'unchanged': {'requirements': set(), 'testcases': set(), 'testplans': set()}}
+ADDED testplans:
+ADDED requirements:
+ADDED testcases:
+MODIFIED testplans:
+ testplan 1
+MODIFIED requirements:
+ Priority requirement
+MODIFIED testcases:
+ Medium priority case
+UNCHANGED testplans:
+UNCHANGED requirements:
+UNCHANGED testcases:
+REMOVED testplans:
+REMOVED requirements:
+REMOVED testcases:
