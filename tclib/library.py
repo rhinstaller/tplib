@@ -64,23 +64,38 @@ def diff(old, new):
     return retval
 
 class Library():
-    def __init__(self, directory):
+    def __init__(self, directory, additional_testplans=None, additional_requirements=None, additional_testcases=None):
         self.directory = directory
-        self.testplans = self._load_testplans()
-        self.testcases = self._load_testcases()
-        self.requirements = self._load_requirements()
+        self.testplans = self._load_testplans(additional_testplans)
+        self.testcases = self._load_testcases(additional_testcases)
+        self.requirements = self._load_requirements(additional_requirements)
         self._calculate_and_stabilize()
 
-    def _load_testplans(self):
-        return self._load_structures(self.directory, '*.plan.yaml', TestPlan)
+    def _load_testplans(self, additional_testplans=None):
+        return self._load_structures(
+            self.directory,
+            '*.plan.yaml',
+            TestPlan,
+            additional_testplans,
+        )
 
-    def _load_testcases(self):
-        return self._load_structures(self.directory, '*.tc.yaml', TestCase)
+    def _load_testcases(self, additional_testcases=None):
+        return self._load_structures(
+            self.directory,
+            '*.tc.yaml',
+            TestCase,
+            additional_testcases,
+        )
 
-    def _load_requirements(self):
-        return self._load_structures(self.directory, '*.req.yaml', Requirement)
+    def _load_requirements(self, additional_requirements=None):
+        return self._load_structures(
+            self.directory,
+            '*.req.yaml',
+            Requirement,
+            additional_requirements,
+        )
 
-    def _load_structures(self, directory, pattern, cls):
+    def _load_structures(self, directory, pattern, cls, additional_structures=None):
         """
         Load structures strored in files of name matching ``pattern`` from
         provided ``directory`` and use the ``cls`` to construct them.
@@ -115,6 +130,11 @@ class Library():
                 break
         if docfiles:
             raise DocfilesError(docfiles, errors)
+        # Add additional structures without inheritance support.
+        if additional_structures:
+            for additional_structure in additional_structures:
+                structure = cls(None, additional_structure, library=self)
+                structures[structure.id] = structure
         return structures
 
     def _calculate_and_stabilize_structures(self, structures):
