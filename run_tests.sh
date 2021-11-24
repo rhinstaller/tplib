@@ -1,6 +1,6 @@
 #!/bin/bash -xeu
 
-export PYTHONPATH=$PYTHONPATH:`pwd`
+export PYTHONPATH=${PYTHONPATH:-}:`pwd`
 export PATH=$PATH:`pwd`
 pushd tests
 
