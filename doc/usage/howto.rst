@@ -11,7 +11,7 @@ I want to track RHEL-7 and RHEL-8 testcases/requirements separately
 -------------------------------------------------------------------
 Use separate branches for RHEL-7 and RHEL-8. For each branch that's desired to
 be imported to Polarion, specify the branches in ``POLARION_PUSH_BRANCHES``
-variable in your deployment. For more info see :ref:`deployment`.
+variable in your deployment.
 
 When the branches are used, they will be taken in account during the import to
 Polarion. Note that testcases/requirements present in different branches are
