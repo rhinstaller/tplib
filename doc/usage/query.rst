@@ -9,10 +9,9 @@ Query tools
 Validate library
 ================
 
-.. argparse::
-   :filename: ../validate.py
-   :func: cli_parser
-   :prog: validate.py
+Validate testplan data by trying to create testcase library.
+
+See ``./validate.py -h``
 
 
 .. _tool_query:
@@ -20,25 +19,22 @@ Validate library
 Filter and display
 ==================
 
-.. argparse::
-   :filename: ../query.py
-   :func: cli_parser
-   :prog: query.py
+Query and print information about testcases and/or requirements in the testcase library.
+
+See ``./query.py -h``
 
 .. _tool_diff:
 
 Show diff
 =========
 
-.. argparse::
-   :filename: ../diff.py
-   :func: cli_parser
-   :prog: diff.py
+Get difference between tclib libraries.
+
+See ``./diff.py -h``
 
 Generate documents
 ==================
 
-.. argparse::
-   :filename: ../generate_documents.py
-   :func: cli_parser
-   :prog: generate_documents.py
+Generate documents for testplans, requirements and/or testcases using jinja2 templates.
+
+See ``./generate_documents.py -h``
