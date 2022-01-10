@@ -20,7 +20,7 @@ sys.path.insert(0, os.path.abspath('..'))
 project = 'tclib'
 copyright = '2020, Pavel Holica'
 author = 'Pavel Holica'
-
+master_doc = 'index'
 
 # -- General configuration ---------------------------------------------------
 
