@@ -25,7 +25,7 @@ jobs:
 
       - name: Build container
         run: |
-          podman build -t tclib -f $GITHUB_WORKSPACE/tests/Containerfile
+          podman build -t tclib -f $GITHUB_WORKSPACE/tests/Containerfile > /dev/null 2>&1
 
       - name: Run tests
         run: |
@@ -33,7 +33,7 @@ jobs:
           podman run --rm -e TCLIB=/root/tclib \
                      -v $GITHUB_WORKSPACE/tclib:/root/tclib:Z \
                      -v $GITHUB_WORKSPACE/tests:/root/tests:Z \
-                     -w /root/tests tclib ./run_tests.sh
+                     -w /root/tests tclib ./run_tests.sh > /dev/null 2>&1
 
       - name: Build documentation
         run: |
