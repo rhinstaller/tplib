@@ -1,0 +1,91 @@
+name: Pull request checks
+
+on:
+  pull_request:
+    branches: [ main ]
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  secrets-check:
+    name: Check if some secrets are set
+    runs-on: ubuntu-latest
+    outputs:
+      extra_tests_available: ${{ steps.extra_tests.outputs.extra_tests_available }}
+    steps:
+      - name: Check if ADDITIONAL_TESTS_REPO is set
+        id: extra_tests
+        run: |
+            echo "::set-output name=extra_tests_available::${{ secrets.ADDITIONAL_TESTS_REPO != '' }}"
+
+  base:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout change
+        uses: actions/checkout@v2
+        with:
+          path: tclib
+
+      - name: Build container
+        run: |
+          podman build -t tclib -f $GITHUB_WORKSPACE/tclib/Containerfile
+
+      - name: Run tests
+        run: |
+          podman run --rm -e TCLIB=/root/tclib \
+                     -v $GITHUB_WORKSPACE/tclib:/root/tclib:Z \
+                     -w /root/tclib tclib ./run_tests.sh
+
+      - name: Build documentation
+        run: |
+          podman run --rm \
+                     -v $GITHUB_WORKSPACE/tclib:/root/tclib:Z \
+                     -w /root/tclib/doc \
+                     tclib make html
+
+      - name: Cleanup
+        if: always()
+        run: |
+          podman rmi -f tclib
+
+  extended:
+    needs: [secrets-check]
+    runs-on: [self-hosted, kstest]
+    if: needs.secrets-check.outputs.extra_tests_available == 'true'
+    steps:
+      - name: Checkout change
+        uses: actions/checkout@v2
+        with:
+          path: tclib
+
+      - name: Clone repository with additional tests
+        run: |
+          git clone --depth 1 ${{ secrets.ADDITIONAL_TESTS_REPO }} tests
+
+      - name: Build container
+        run: |
+          podman build -t tclib -f $GITHUB_WORKSPACE/tests/Containerfile > /dev/null 2>&1
+
+      - name: Run tests
+        run: |
+          # This combines additional tests with tests in tclib and executes all
+          podman run --rm -e TCLIB=/root/tclib \
+                     -v $GITHUB_WORKSPACE/tclib:/root/tclib:Z \
+                     -v $GITHUB_WORKSPACE/tests:/root/tests:Z \
+                     -w /root/tests tclib ./run_tests.sh > /dev/null 2>&1
+
+      - name: Build documentation
+        run: |
+          podman run --rm \
+                     -v $GITHUB_WORKSPACE/tclib:/root/tclib:Z \
+                     -w /root/tclib/doc \
+                     tclib make html
+
+      - name: Cleanup
+        if: always()
+        run: |
+          rm -rf $GITHUB_WORKSPACE/tests
+          podman rmi -f tclib
