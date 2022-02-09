@@ -1,0 +1,16 @@
+name: Engine quality
+description: Tests engine quality
+tags:
+  - engine
+author: tester@example.com
+priority: 7
+execution:
+  type: xray
+instructions:
+  setup:
+    - Set it up!
+  steps:
+  - step: Check
+    result: Pass
+  teardown:
+    - Done

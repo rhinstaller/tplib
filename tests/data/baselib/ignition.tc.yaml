@@ -1,0 +1,14 @@
+name: Ignition
+description: Tests ignition system
+tags:
+  - electronics
+author: tester@example.com
+priority: 6
+execution:
+  type: manual
+instructions:
+  steps:
+  - step: Connect
+    result: Connected
+  - step: Try to start
+    result: Started
