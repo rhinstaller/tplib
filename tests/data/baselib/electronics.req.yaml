@@ -1,0 +1,4 @@
+name: Electronics
+description: electronics
+verified_by:
+  query: '"electronics" in tc.tags'
