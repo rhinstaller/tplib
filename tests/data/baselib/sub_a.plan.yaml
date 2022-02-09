@@ -1,0 +1,22 @@
+name: Sub plan A
+parent_plan: Main parent plan
+description: Sub plan A for egines
+verified_by:
+  test_cases:
+    query: '"engine" in tc.tags and
+            "disabled" not in tc.tags'
+    direct_list:
+      - Ignition
+acceptance_criteria:
+  test_cases:
+    query: '"engine" in tc.tags and
+            "disabled" not in tc.tags and
+            tc.priority > 5'
+reporting:
+  - type: mail
+    condition: 'result == "fail"'
+    data:
+      to: engines@example.com
+  - type: testdb
+    data:
+      table: engine_testing

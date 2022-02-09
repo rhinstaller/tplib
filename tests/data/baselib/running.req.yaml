@@ -1,0 +1,6 @@
+name: Running
+description: The engine must be running
+verified_by:
+  query: '"engine" in tc.tags'
+  direct_list:
+    - Ignition

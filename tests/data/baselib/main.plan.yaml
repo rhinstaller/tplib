@@ -1,0 +1,21 @@
+name: Main parent plan
+description: Main parent test plan
+tags: 
+  - main
+point_person: tester@example.com
+artifact_type: vehicle
+execute_on:
+  - filter: "event.type == 'assembly'"
+configurations:
+  - wheels: 4
+    drivetrain: gas
+  - wheels: 4
+    drivetrain: electric
+  - wheels: 8
+    drivetrain: gas
+  - wheels: 8
+    drivetrain: electric
+reporting:
+  - type: testdb
+    data:
+      table: general_testing
