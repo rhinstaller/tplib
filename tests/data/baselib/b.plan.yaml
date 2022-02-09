@@ -1,0 +1,19 @@
+name: Plan B
+description: Test plan with xray testcases
+point_person: tester@example.com
+artifact_type: vehicle
+execute_on:
+  - filter: "event.type == 'assembly'"
+verified_by:
+  test_cases:
+    query: '"xray" == tc.execution.type and
+            "disabled" not in tc.tags'
+configurations:
+  - wheels: 4
+    drivetrain: gas
+  - wheels: 8
+    drivetrain: gas
+reporting:
+  - type: testdb
+    data:
+      table: xray_testing
