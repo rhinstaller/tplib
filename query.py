@@ -6,7 +6,7 @@ import logging
 import pprint
 from collections import OrderedDict
 from tclib.library import Library
-from tclib.expressions import eval_bool, eval_str
+from tclib.expressions import compile_bool, compile_str
 
 # ordered dict
 
@@ -97,33 +97,30 @@ def main(*in_args):
         format=logformat,
     )
     library = Library(args.directory)
+    eval_bool_query = compile_bool(args.query)
+    if args.print_query is not None:
+        eval_str_format = compile_str(args.print_query)
+        def print_func(**kwargs):
+            print(eval_str_format(**kwargs))
+    elif args.brief:
+        def print_func(i, **kwargs):
+            print(repr(i))
+    else:
+        def print_func(i, **kwargs):
+            print(i.dump())
+
     if not args.testcases_only and not args.testplans_only:
         for _, requirement in sorted(library.requirements.items()):
-            if eval_bool(args.query, i=requirement, req=requirement):
-                if args.print_query is not None:
-                    print(eval_str(args.print_query, i=requirement, req=requirement))
-                elif args.brief:
-                    print(repr(requirement))
-                else:
-                    print(requirement.dump())
+            if eval_bool_query(i=requirement, req=requirement):
+                print_func(i=requirement, req=requirement)
     if not args.requirements_only and not args.testplans_only:
         for _, testcase in sorted(library.testcases.items()):
-            if eval_bool(args.query, i=testcase, tc=testcase):
-                if args.print_query is not None:
-                    print(eval_str(args.print_query, i=testcase, tc=testcase))
-                elif args.brief:
-                    print(repr(testcase))
-                else:
-                    print(testcase.dump())
+            if eval_bool_query(i=testcase, tc=testcase):
+                print_func(i=testcase, tc=testcase)
     if not args.requirements_only and not args.testcases_only:
         for _, testplan in sorted(library.testplans.items()):
-            if eval_bool(args.query, i=testplan, tp=testplan):
-                if args.print_query is not None:
-                    print(eval_str(args.print_query, i=testplan, tp=testplan))
-                elif args.brief:
-                    print(repr(testplan))
-                else:
-                    print(testplan.dump())
+            if eval_bool_query(i=testplan, tp=testplan):
+                print_func(i=testplan, tp=testplan)
 
 if __name__ == "__main__":
     sys.exit(main(*sys.argv[1:]))
