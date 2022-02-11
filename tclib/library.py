@@ -6,7 +6,7 @@ from .structures.testcase import TestCase
 from .structures.requirement import Requirement
 from .structures.testplan import TestPlan
 from .exceptions import CollisionError, UnknownParentError, DocfilesError
-from .expressions import eval_bool
+from .expressions import compile_bool
 
 
 def _iter_documents(directory, pattern):
@@ -194,7 +194,8 @@ class Library():
         if get_from is None:
             get_from = self.requirements.values()
 
-        return { requirement for requirement in get_from if eval_bool(query, req=requirement, **kwargs) }
+        eval_bool_query = compile_bool(query)
+        return { requirement for requirement in get_from if eval_bool_query(req=requirement, **kwargs) }
 
     def getTestCasesByQuery(self, query, get_from=None, **kwargs):
         """ Finds testcases based on query, any extra arguments are handover to template.render(),
@@ -214,7 +215,8 @@ class Library():
         if get_from is None:
             get_from = self.testcases.values()
 
-        return { testcase for testcase in get_from if eval_bool(query, tc=testcase, **kwargs) }
+        eval_bool_query = compile_bool(query)
+        return { testcase for testcase in get_from if eval_bool_query(tc=testcase, **kwargs) }
 
     def getTestPlansByQuery(self, query, get_from=None, **kwargs):
         """ Finds testplans based on query, any extra arguments are handover to template.render(),
@@ -234,7 +236,8 @@ class Library():
         if get_from is None:
             get_from = self.testplans.values()
 
-        return { testplan for testplan in get_from if eval_bool(query, tp=testplan, **kwargs) }
+        eval_bool_query = compile_bool(query)
+        return { testplan for testplan in get_from if eval_bool_query(tp=testplan, **kwargs) }
 
     def getRequirementsByNamedQuery(self, query_name, get_from=None, **kwargs):
         """ Finds requirements based on query, any extra arguments are handover to template.render(),
