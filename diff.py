@@ -1,6 +1,7 @@
 #!/bin/env python3
 
 import sys
+import traceback
 import argparse
 import logging
 from pprint import pprint
@@ -129,6 +130,14 @@ def main(*in_args):
                 print(f'{state.upper()} {item}:')
             for entry in diff[state][item]:
                 print(fmt.format(entry))
+    if any(any(len(item) > 0 for item in diff[state].values()) for state in ["removed", "added", "modified"]):
+        return 1
+    return 0
 
 if __name__ == "__main__":
-    sys.exit(main(*sys.argv[1:]))
+    try:
+        rc = main(*sys.argv[1:])
+    except:
+        traceback.print_exc()
+        sys.exit(2)
+    sys.exit(rc)
