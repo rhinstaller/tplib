@@ -12,6 +12,8 @@ acceptance_criteria:
     query: '"engine" in tc.tags and
             "disabled" not in tc.tags and
             tc.priority > 5'
+    direct_list:
+      - Ignition
 reporting:
   - type: mail
     condition: 'result == "fail"'

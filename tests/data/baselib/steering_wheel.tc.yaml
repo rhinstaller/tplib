@@ -1,0 +1,15 @@
+name: Steering wheel
+description: Tests steering wheel
+tags:
+  - interior
+  - controls
+author: tester@example.com
+priority: 9
+execution:
+  type: manual
+instructions:
+  steps:
+  - step: Steer left
+    result: Wheels turned
+  - step: Steer right
+    result: Wheels turned

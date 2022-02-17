@@ -1,0 +1,9 @@
+name: Controls
+description: controls
+tags:
+  - important
+verified_by:
+  query: '"controls" in tc.tags'
+acceptance_criteria:
+  direct_list:
+    - Steering wheel

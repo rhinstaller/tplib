@@ -8,6 +8,15 @@ verified_by:
   test_cases:
     query: '"xray" == tc.execution.type and
             "disabled" not in tc.tags'
+  requirements:
+    direct_list:
+      - Electronics
+    query: '"important" in req.tags'
+acceptance_criteria:
+  requirements:
+    direct_list:
+      - Electronics
+    query: '"important" in req.tags'
 configurations:
   - wheels: 4
     drivetrain: gas
