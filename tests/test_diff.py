@@ -23,8 +23,8 @@ class DiffBase():
                          'requirements': set(),
                          'testcases': set()},
             'unchanged': {'testplans': {'Main parent plan', 'Sub plan A', 'Plan B'},
-                          'requirements': {'Running', 'Electronics'},
-                          'testcases': {'Ignition', 'Engine quality', 'Engine fuel consumption'}}
+                          'requirements': {'Running', 'Electronics', 'Controls'},
+                          'testcases': {'Ignition', 'Engine quality', 'Engine fuel consumption', 'Steering wheel'}}
         }
 
     def setUp(cls):
@@ -139,7 +139,9 @@ class TestRemovedRequirement(DiffBase, unittest.TestCase):
         self.expected['removed']['requirements'].add('Running')
         # Testcases have verifiesRequirement
         self.expected['modified']['testcases'] = {'Ignition', 'Engine quality', 'Engine fuel consumption'}
-        self.expected['unchanged']['testcases'] = set()
+        self.expected['unchanged']['testcases'].remove('Ignition')
+        self.expected['unchanged']['testcases'].remove('Engine quality')
+        self.expected['unchanged']['testcases'].remove('Engine fuel consumption')
 
 class TestAddedRequirement(DiffBase, unittest.TestCase):
     def setUp(self):
@@ -153,7 +155,9 @@ class TestAddedRequirement(DiffBase, unittest.TestCase):
         self.expected['added']['requirements'].add('Running')
         # Testcases have verifiesRequirement
         self.expected['modified']['testcases'] = {'Ignition', 'Engine quality', 'Engine fuel consumption'}
-        self.expected['unchanged']['testcases'] = set()
+        self.expected['unchanged']['testcases'].remove('Ignition')
+        self.expected['unchanged']['testcases'].remove('Engine quality')
+        self.expected['unchanged']['testcases'].remove('Engine fuel consumption')
 
     def test_diff(self):
         difference = library.diff(self.testlib, self.baselib)
