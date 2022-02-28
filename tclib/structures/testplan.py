@@ -90,12 +90,12 @@ class TestPlan(DocumentObject):
         'acceptanceRequirements'
     ]
 
-    def __init__(self, filename, library=None, basedir=None, possible_parents=dict()):
+    def __init__(self, filename, override_data=None, library=None, basedir=None, possible_parents=dict()):
         self.verificationTestCases = set()
         self.verificationRequirements = set()
         self.acceptanceTestCases = set()
         self.acceptanceRequirements = set()
-        super().__init__(filename, library=library, basedir=basedir, possible_parents=possible_parents)
+        super().__init__(filename, override_data=override_data, library=library, basedir=basedir, possible_parents=possible_parents)
 
     def stabilize(self):
         # Get verificationRequirements
