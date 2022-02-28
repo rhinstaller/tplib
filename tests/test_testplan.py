@@ -96,7 +96,7 @@ class TestStabilizeInvalidAcceptance(unittest.TestCase):
         dir_util.remove_tree(self.temp_dir)
 
     def test_invalid_acceptance_requirements(self):
-        tp = testplan.TestPlan(self.temporary_tp, self.baselib)
+        tp = testplan.TestPlan(self.temporary_tp, library=self.baselib)
         try:
             tp.stabilize()
         except RuntimeError as exp:
