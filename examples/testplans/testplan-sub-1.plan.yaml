@@ -17,7 +17,7 @@ verified_by:
 reporting:
   - type: email
     condition:
-    groub_by:
+    group_by:
       - architecture
     data:
       template: |
