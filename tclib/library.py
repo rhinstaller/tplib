@@ -9,8 +9,11 @@ from .exceptions import CollisionError, UnknownParentError, DocfilesError
 from .expressions import compile_bool
 
 
+def _reraise_exception(_):
+    raise
+
 def _iter_documents(directory, pattern):
-    for root, dirs, files in os.walk(directory):
+    for root, dirs, files in os.walk(directory, onerror=_reraise_exception):
         for filename in files:
             if fnmatch.fnmatchcase(filename, pattern):
                 yield os.path.join(root, filename)
