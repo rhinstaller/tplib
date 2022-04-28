@@ -13,6 +13,8 @@ BuildRequires:  git
 BuildRequires:  diffutils
 BuildRequires:  python3-devel
 BuildRequires:  python3-libxml2
+BuildRequires:  python3-tox
+BuildRequires:  python3-wheel
 
 %global _description %{expand:
 A python library for test cases, test plans, and requirements stored
