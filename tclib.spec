@@ -12,7 +12,10 @@ BuildRequires:  gcc
 BuildRequires:  git
 BuildRequires:  diffutils
 BuildRequires:  python3-devel
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-libxml2
+BuildRequires:  python3-pylint
+BuildRequires:  python3-sphinx
 BuildRequires:  python3-tox
 BuildRequires:  python3-wheel
 
@@ -51,8 +54,8 @@ Summary:        %{summary}
 
 
 %files -n python3-tclib -f %{pyproject_files}
+/usr/bin/*
 %doc README.*
-%{_bindir}/tclib_greeting
 
 
 %changelog
