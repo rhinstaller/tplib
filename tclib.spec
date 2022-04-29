@@ -1,6 +1,6 @@
 Name:           python-tclib
-Version:        0.0.0
-Release:        0%{?dist}
+Version:        1.0.0
+Release:        1%{?dist}
 Summary:        Library for test cases, test plans
 
 License:        BSD
@@ -69,3 +69,6 @@ Requires:  python3-pyyaml
 %endif
 
 %changelog
+* Fri Apr 29 2022 Marta Lewandowska <mlewando@redhat.com> 1.0.0-1
+- new package built with tito
+
