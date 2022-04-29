@@ -40,19 +40,17 @@ setup(
     python_requires=">=3, <4",
     install_requires=[
         'jinja2',
-        'pylint',
-        'pyyaml',
-        'sphinx'
+        'pyyaml'
         ],
     package_data={
         "": ["doc/*", "examples/*"],
     },
     entry_points={
         "console_scripts": [
-            "tcdiff=tclib:diff_main.main",
-            "tclib_generate_documents=tclib:generate_documents_main.main",
-            "tcquery=tclib:query_main.main",
-            "tcvalidate=tclib:validate_main.main",
+            "tcdiff=tclib.diff_main:main",
+            "tc_generate_documents=tclib.generate_documents_main:main",
+            "tcquery=tclib.query_main:main",
+            "tcvalidate=tclib.validate_main:main",
         ],
     },
 )
