@@ -20,7 +20,7 @@ Test plan
 =========
 
 :suffix: ``.plan.yaml``
-:class: :py:class:`tclib.structures.testplan.TestPlan`
+:class: :py:class:`tplib.structures.testplan.TestPlan`
 :library attribute: ``testplans``
 :yaml structure:
 
@@ -45,35 +45,35 @@ Test plan
     `package`. If one would like to execute the test plan only for scratch
     packages at the moment they were built, then artifact_type would be
     `package.built.scratch`. Please consult with the execution tooling
-    (pipeline) that uses tclib for storing test plans data.
+    (pipeline) that uses tplib for storing test plans data.
   * **components** (`set`, `inherited`, `optional`) -- Set of component names related to the testplan
   * **execute_on** (`list`, `inherited`) -- Define additional conditions for
     the test plan execution.
 
     * **type** (`str`) --
     * **filter** (`str`) -- Jinja2 expression, for more information consult
-      with the execution tooling (pipeline) that uses tclib for storing test
+      with the execution tooling (pipeline) that uses tplib for storing test
       plans data.
 
   * **parent_plan** (`str`, `optional`) -- **name** of other plan which should
     be used as parent for this plan allowing inheritance of certain fields.
     Circular inheritance (A -> B -> A -> ...) is not allowed and will result
     in error as well as referencing non-existing test plan.
-  * **verified_by** (`dict` - :py:class:`tclib.structures.testplan.Selection`, `optional`)
+  * **verified_by** (`dict` - :py:class:`tplib.structures.testplan.Selection`, `optional`)
 
-    * **test_cases** (`dict` - :py:class:`tclib.structures.testplan.QueryObject`, `optional`)
+    * **test_cases** (`dict` - :py:class:`tplib.structures.testplan.QueryObject`, `optional`)
 
       * **direct_list** (`list`) -- List of testcase names
       * **query** (`str`) -- Jinja2 expression, see more here: TBD
       * **named_query** (`str`) -- Reference to query, not implemented
 
-    * **requirements** (`dict` - :py:class:`tclib.structures.testplan.QueryObject`, `optional`)
+    * **requirements** (`dict` - :py:class:`tplib.structures.testplan.QueryObject`, `optional`)
 
       * **direct_list** (`list`) -- List of requirement names
       * **query** (`str`) -- Jinja2 expression, see more here: TBD
       * **named_query** (`str`) -- Reference to query, not implemented
 
-  * **acceptance_criteria** (`dict` - :py:class:`tclib.structures.testplan.Selection`, `optional`) -- Same as **verified_by**
+  * **acceptance_criteria** (`dict` - :py:class:`tplib.structures.testplan.Selection`, `optional`) -- Same as **verified_by**
   * **reporting** (`list`, `inherited`)
 
     * **type** (`str`) -- Name of reporting should be used while executing the test plan.
@@ -99,20 +99,20 @@ Requirement
 ===========
 
 :suffix: ``.req.yaml``
-:class: :py:class:`tclib.structures.requirement.Requirement`
+:class: :py:class:`tplib.structures.requirement.Requirement`
 :library attribute: ``requirements``
 :yaml structure:
 
   * **name** (`str`, `unique`) --
   * **description** (`str`, `optional`) --
   * **tags** (`list`) --
-  * **verified_by** (`dict` - :py:class:`tclib.structures.requirement.QueryObject`, `optional`)
+  * **verified_by** (`dict` - :py:class:`tplib.structures.requirement.QueryObject`, `optional`)
 
     * **direct_list** (`list`) -- List of testcase names
     * **query** (`str`) -- Jinja2 expression, see more here: TBD
     * **named_query** (`str`) -- Reference to query, not implemented
 
-  * **acceptance_criteria** (`dict` - :py:class:`tclib.structures.requirement.QueryObject`, `optional`) -- Same as **verified_by**
+  * **acceptance_criteria** (`dict` - :py:class:`tplib.structures.requirement.QueryObject`, `optional`) -- Same as **verified_by**
 
 Examples
 --------
@@ -128,7 +128,7 @@ Examples
 Test case
 =========
 :suffix: ``.tc.yaml``
-:class: :py:class:`tclib.structures.testcase.TestCase`
+:class: :py:class:`tplib.structures.testcase.TestCase`
 :library attribute: ``testcases``
 :yaml structure:
 
@@ -153,9 +153,9 @@ Test case
      in case of `manual` for purposes of some upcoming automation.
 
  * **filter** (`list`, `optional`) -- TBD
- * **instructions** (`dict` - :py:class:`tclib.structures.testcase.Instructions`)
+ * **instructions** (`dict` - :py:class:`tplib.structures.testcase.Instructions`)
 
-   * **setup** (`list`, `optional`) -- list of :py:class:`tclib.structures.testcase.Instruction`
+   * **setup** (`list`, `optional`) -- list of :py:class:`tplib.structures.testcase.Instruction`
 
      :variable item (full):
       * **step** (`str`) --

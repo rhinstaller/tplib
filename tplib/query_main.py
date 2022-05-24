@@ -5,8 +5,8 @@ import argparse
 import logging
 import pprint
 from collections import OrderedDict
-from tclib.library import Library
-from tclib.expressions import compile_bool, compile_str
+from tplib.library import Library
+from tplib.expressions import compile_bool, compile_str
 
 # ordered dict
 
@@ -74,12 +74,12 @@ Examples:
     verbosity.add_argument(
         '-d', '--debug',
         action="store_true",
-        help="Turn on debugging in tclib.",
+        help="Turn on debugging in tplib.",
     )
     verbosity.add_argument(
         '-q', '--quiet',
         action="store_true",
-        help="Run logging in quiet mode: show tclib errors and failures only.",
+        help="Run logging in quiet mode: show tplib errors and failures only.",
     )
     return parser
 

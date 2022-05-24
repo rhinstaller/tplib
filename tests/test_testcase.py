@@ -1,5 +1,5 @@
 import unittest
-from tclib.structures import testcase
+from tplib.structures import testcase
 
 class TestTestcase(unittest.TestCase):
     def test_simple_load(self):

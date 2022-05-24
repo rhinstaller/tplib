@@ -4,7 +4,7 @@ from distutils import dir_util
 import os
 import yaml
 from tempfile import mkdtemp
-from tclib import library
+from tplib import library
 
 
 class DiffBase():

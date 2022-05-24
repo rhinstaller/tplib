@@ -11,16 +11,16 @@ setup(
     # package, this name will be registered for you. It will determine how
     # users can install this project, e.g.:
     #
-    # $ pip install tclib
+    # $ pip install tplib
     #
-    # And where it will live on PyPI: https://pypi.org/project/tclib/
+    # And where it will live on PyPI: https://pypi.org/project/tplib/
     #
-    name="tclib",
+    name="tplib",
     version="1.0.0",
     description="A python library for managing test cases, test plans",
     long_description=long_description,
     long_description_content_type="text/plain",
-    url="https://github.com/rhinstaller/tclib",
+    url="https://github.com/rhinstaller/tplib",
     author="Pavel Holica",
     author_email="pholica@redhat.com",
     classifiers=[
@@ -47,10 +47,10 @@ setup(
     },
     entry_points={
         "console_scripts": [
-            "tcdiff=tclib.diff_main:main",
-            "tc_generate_documents=tclib.generate_documents_main:main",
-            "tcquery=tclib.query_main:main",
-            "tcvalidate=tclib.validate_main:main",
+            "tcdiff=tplib.diff_main:main",
+            "tc_generate_documents=tplib.generate_documents_main:main",
+            "tcquery=tplib.query_main:main",
+            "tcvalidate=tplib.validate_main:main",
         ],
     },
 )

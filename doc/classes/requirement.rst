@@ -4,7 +4,7 @@
 Requirement
 ===========
 
-.. automodule:: tclib.structures.requirement
+.. automodule:: tplib.structures.requirement
    :members:
    :undoc-members:
 

@@ -28,7 +28,7 @@ See ``./query.py -h``
 Show diff
 =========
 
-Get difference between tclib libraries.
+Get difference between tplib libraries.
 
 See ``./diff.py -h``
 

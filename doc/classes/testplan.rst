@@ -4,7 +4,7 @@
 Testplan
 ========
 
-.. automodule:: tclib.structures.testplan
+.. automodule:: tplib.structures.testplan
    :members:
    :undoc-members:
 

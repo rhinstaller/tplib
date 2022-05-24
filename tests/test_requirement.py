@@ -1,6 +1,6 @@
 import unittest
-from tclib import library
-from tclib.structures import requirement
+from tplib import library
+from tplib.structures import requirement
 
 class TestLoadRequirement(unittest.TestCase):
     def test_simple_load(self):

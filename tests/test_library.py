@@ -1,5 +1,5 @@
 import unittest
-from tclib import library
+from tplib import library
 
 class TestAdditionalStructures(unittest.TestCase):
     def setUp(self):
@@ -52,42 +52,42 @@ class TestAdditionalStructures(unittest.TestCase):
 
     def test_additional_testplan(self):
         # Load additional testplan
-        tclib_library = library.Library(self.library_dir, additional_testplans=[self.tp_data])
-        tp = tclib_library.testplans['Additional Testplan']
+        tplib_library = library.Library(self.library_dir, additional_testplans=[self.tp_data])
+        tp = tplib_library.testplans['Additional Testplan']
         # Verify testplan was loaded
         self.assertEquals(tp.name, 'Additional Testplan') 
         # Check that stabilization was performed on it
-        self.assertIn(tclib_library.testcases['Steering wheel'], tp.verificationTestCases)
+        self.assertIn(tplib_library.testcases['Steering wheel'], tp.verificationTestCases)
 
     def test_additional_testcase(self):
         # Load additional testcase
-        tclib_library = library.Library(self.library_dir, additional_testcases=[self.tc_data])
-        tc = tclib_library.testcases['Additional Testcase']
+        tplib_library = library.Library(self.library_dir, additional_testcases=[self.tc_data])
+        tc = tplib_library.testcases['Additional Testcase']
         # Verify testcase was loaded
         self.assertEquals(tc.name, 'Additional Testcase') 
         # Check that stabilization was performed on it
-        self.assertIn(tclib_library.requirements['Electronics'], tc.verifiesRequirement)
+        self.assertIn(tplib_library.requirements['Electronics'], tc.verifiesRequirement)
 
     def test_additional_requirement(self):
         # Load additional requirement
-        tclib_library = library.Library(self.library_dir, additional_requirements=[self.req_data])
-        req = tclib_library.requirements['Additional Requirement']
+        tplib_library = library.Library(self.library_dir, additional_requirements=[self.req_data])
+        req = tplib_library.requirements['Additional Requirement']
         # Verify requirement was loaded
         self.assertEquals(req.name, 'Additional Requirement') 
         # Check that stabilization was performed on it
-        self.assertIn(tclib_library.testcases['Engine quality'], req.verificationTestCases)
+        self.assertIn(tplib_library.testcases['Engine quality'], req.verificationTestCases)
 
     def test_linked_additional_structures(self):
         # Remove query that could silently invalidate this testcase in the future
         del(self.tp_data['verified_by']['test_cases'])
         # Load additional structures
-        tclib_library = library.Library(self.library_dir,
+        tplib_library = library.Library(self.library_dir,
                                         additional_testplans=[self.tp_data],
                                         additional_requirements=[self.req_data],
                                         additional_testcases=[self.tc_data2])
-        linked_tc = tclib_library.testcases['Additional Testcase 2']
-        linked_req = tclib_library.requirements['Additional Requirement']
-        linked_tp = tclib_library.testplans['Additional Testplan']
+        linked_tc = tplib_library.testcases['Additional Testcase 2']
+        linked_req = tplib_library.requirements['Additional Requirement']
+        linked_tp = tplib_library.testplans['Additional Testplan']
         # Check testing data is still valid (Additional Testcase 2 is not linked to other requirement)
         self.assertEquals(linked_tc.verifiesRequirement, [linked_req])
         # Verify links between additional structures work
