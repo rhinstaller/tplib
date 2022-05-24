@@ -3,8 +3,8 @@ import yaml
 from os import path
 from tempfile import mkdtemp
 from distutils import dir_util
-from tclib import library
-from tclib.structures import testplan
+from tplib import library
+from tplib.structures import testplan
 
 class TestLoadTestPlan(unittest.TestCase):
     def test_simple_load(self):

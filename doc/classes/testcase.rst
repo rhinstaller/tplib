@@ -4,7 +4,7 @@
 Testcase
 ========
 
-.. automodule:: tclib.structures.testcase
+.. automodule:: tplib.structures.testcase
    :members:
    :undoc-members:
 

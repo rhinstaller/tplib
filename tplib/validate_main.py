@@ -3,7 +3,7 @@
 import sys
 import argparse
 import logging
-from tclib.library import Library
+from tplib.library import Library
 
 # ordered dict
 
@@ -19,12 +19,12 @@ def cli_parser():
     verbosity.add_argument(
         '-d', '--debug',
         action="store_true",
-        help="Turn on debugging in tclib.",
+        help="Turn on debugging in tplib.",
     )
     verbosity.add_argument(
         '-q', '--quiet',
         action="store_true",
-        help="Run logging in quiet mode: show tclib errors and failures only.",
+        help="Run logging in quiet mode: show tplib errors and failures only.",
     )
     return parser
 

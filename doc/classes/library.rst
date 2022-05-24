@@ -2,6 +2,6 @@
 Library
 =======
 
-.. automodule:: tclib.library
+.. automodule:: tplib.library
    :members:
    :undoc-members:

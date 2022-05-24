@@ -2,7 +2,7 @@
 
 import sys
 import traceback
-from tclib.diff_main import main
+from tplib.diff_main import main
 
 if __name__ == "__main__":
     try:

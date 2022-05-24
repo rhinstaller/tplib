@@ -6,7 +6,7 @@ import argparse
 import logging
 from pprint import pprint
 
-import tclib.library
+import tplib.library
 
 def cli_parser():
     parser = argparse.ArgumentParser(description='My awesome app.')
@@ -93,12 +93,12 @@ def cli_parser():
     verbosity.add_argument(
         '-d', '--debug',
         action="store_true",
-        help="Turn on debugging in tclib.",
+        help="Turn on debugging in tplib.",
     )
     verbosity.add_argument(
         '-q', '--quiet',
         action="store_true",
-        help="Run logging in quiet mode: show tclib errors and failures only.",
+        help="Run logging in quiet mode: show tplib errors and failures only.",
     )
     return parser
 
@@ -117,10 +117,10 @@ def main():
         format=logformat,
     )
     ...
-    o = tclib.library.Library(args.old)
-    n = tclib.library.Library(args.new)
+    o = tplib.library.Library(args.old)
+    n = tplib.library.Library(args.new)
 
-    diff = tclib.library.diff(o, n)
+    diff = tplib.library.diff(o, n)
     if args.no_headers:
         fmt = '{}'
     else:
