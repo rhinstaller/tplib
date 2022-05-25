@@ -27,29 +27,29 @@ jobs:
       - name: Checkout change
         uses: actions/checkout@v2
         with:
-          path: tclib
+          path: tplib
 
       - name: Build container
         run: |
-          podman build -t tclib -f $GITHUB_WORKSPACE/tclib/Containerfile
+          podman build -t tplib -f $GITHUB_WORKSPACE/tplib/Containerfile
 
       - name: Run tests
         run: |
-          podman run --rm -e TCLIB=/root/tclib \
-                     -v $GITHUB_WORKSPACE/tclib:/root/tclib:Z \
-                     -w /root/tclib tclib ./run_tests.sh
+          podman run --rm -e TPLIB=/root/tplib \
+                     -v $GITHUB_WORKSPACE/tplib:/root/tplib:Z \
+                     -w /root/tplib tplib ./run_tests.sh
 
       - name: Build documentation
         run: |
           podman run --rm \
-                     -v $GITHUB_WORKSPACE/tclib:/root/tclib:Z \
-                     -w /root/tclib/doc \
-                     tclib make html
+                     -v $GITHUB_WORKSPACE/tplib:/root/tplib:Z \
+                     -w /root/tplib/doc \
+                     tplib make html
 
       - name: Cleanup
         if: always()
         run: |
-          podman rmi -f tclib
+          podman rmi -f tplib
 
   extended:
     needs: [secrets-check]
@@ -59,7 +59,7 @@ jobs:
       - name: Checkout change
         uses: actions/checkout@v2
         with:
-          path: tclib
+          path: tplib
 
       - name: Clone repository with additional tests
         run: |
@@ -67,25 +67,25 @@ jobs:
 
       - name: Build container
         run: |
-          podman build -t tclib -f $GITHUB_WORKSPACE/tests/Containerfile > /dev/null 2>&1
+          podman build -t tplib -f $GITHUB_WORKSPACE/tests/Containerfile > /dev/null 2>&1
 
       - name: Run tests
         run: |
-          # This combines additional tests with tests in tclib and executes all
-          podman run --rm -e TCLIB=/root/tclib \
-                     -v $GITHUB_WORKSPACE/tclib:/root/tclib:Z \
+          # This combines additional tests with tests in tplib and executes all
+          podman run --rm -e TPLIB=/root/tplib \
+                     -v $GITHUB_WORKSPACE/tplib:/root/tplib:Z \
                      -v $GITHUB_WORKSPACE/tests:/root/tests:Z \
-                     -w /root/tests tclib ./run_tests.sh > /dev/null 2>&1
+                     -w /root/tests tplib ./run_tests.sh > /dev/null 2>&1
 
       - name: Build documentation
         run: |
           podman run --rm \
-                     -v $GITHUB_WORKSPACE/tclib:/root/tclib:Z \
-                     -w /root/tclib/doc \
-                     tclib make html
+                     -v $GITHUB_WORKSPACE/tplib:/root/tplib:Z \
+                     -w /root/tplib/doc \
+                     tplib make html
 
       - name: Cleanup
         if: always()
         run: |
           rm -rf $GITHUB_WORKSPACE/tests
-          podman rmi -f tclib
+          podman rmi -f tplib
