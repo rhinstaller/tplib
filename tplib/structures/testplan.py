@@ -47,6 +47,7 @@ class Reporting(DataObject):
         m('type'),
         m('condition', required=False),
         m('group_by', required=False, func=GroupBy),
+        m('submit_issues', required=False, allowed_types=bool),
         m('data', required=False, allowed_types=object),
     ))
 
